@@ -2,15 +2,15 @@ import React from 'react'
 import Display from './Display'
 // import { AppProvider } from './context/AppContext'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { AppProvider } from './context/AppsContext'
+import { AppsProvider } from './context/AppsContext'
 
 const App = () => {
   return (
-    <AppProvider>
+    <AppsProvider>
       <Router>
         <Display/>
       </Router>
-    </AppProvider>
+    </AppsProvider>
   )
 }
 

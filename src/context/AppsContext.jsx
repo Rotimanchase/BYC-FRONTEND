@@ -2,11 +2,11 @@ import React, { useState, useContext, createContext, useEffect, useCallback } fr
 import axiosInstance, { setAuthToken } from '../../axios.js';
 import toast from 'react-hot-toast';
 
-const AppContext = createContext();
+const AppsContext = createContext();
 
-export const useAppContext = () => useContext(AppContext);
+export const useAppContext = () => useContext(AppsContext);
 
-export const AppProvider = ({ children }) => {
+export const AppsProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [user, setUser] = useState(null);
@@ -418,7 +418,7 @@ export const AppProvider = ({ children }) => {
   }, [user, fetchCart, fetchWishlist, fetchRecentlyViewed]);
 
   return (
-    <AppContext.Provider
+    <AppsContext.Provider
       value={{
         cart,
         wishlist,
@@ -445,6 +445,6 @@ export const AppProvider = ({ children }) => {
       }}
     >
       {children}
-    </AppContext.Provider>
+    </AppsContext.Provider>
   );
 };
