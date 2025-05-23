@@ -1,21 +1,24 @@
 import axios from 'axios';
 
-// Fix environment variable detection for Vite
+// Remove trailing slash and fix environment detection
 const API_BASE = import.meta.env.VITE_API_URL || 
   (import.meta.env.MODE === 'production' 
-    ? 'https://byc-zeta.vercel.app'  // ⚠️ REPLACE with your actual backend URL
+    ? 'https://byc-backend.vercel.app'  // No trailing slash
     : 'http://localhost:4800'
   );
 
+console.log('🔍 API Base URL:', API_BASE); // Debug log
+
 const axiosInstance = axios.create({
-  baseURL: API_BASE, // ✅ Fixed: was hardcoded to localhost
+  baseURL: API_BASE,
   withCredentials: true,
-  timeout: 30000, // 30 seconds timeout for mobile networks
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
+// Rest of your interceptors remain the same...
 axiosInstance.interceptors.request.use(
   (config) => {
     const userToken = localStorage.getItem('token');
@@ -45,13 +48,5 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-export const setAuthToken = (token) => {
-  if (token) {
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete axiosInstance.defaults.headers.common['Authorization'];
-  }
-};
 
 export default axiosInstance;
