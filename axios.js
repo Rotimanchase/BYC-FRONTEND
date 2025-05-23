@@ -3,7 +3,7 @@ import axios from 'axios';
 // Fix environment variable detection for Vite
 const API_BASE = import.meta.env.VITE_API_URL || 
   (import.meta.env.MODE === 'production' 
-    ? 'https://byc-backend.vercel.app/'  // ⚠️ REPLACE with your actual backend URL
+    ? 'https://byc-zeta.vercel.app'  // ⚠️ REPLACE with your actual backend URL
     : 'http://localhost:4800'
   );
 
