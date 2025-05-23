@@ -1,13 +1,9 @@
 import axios from 'axios';
 
-// Remove trailing slash and fix environment detection
-const API_BASE = import.meta.env.VITE_API_URL || 
-  (import.meta.env.MODE === 'production' 
-    ? 'https://byc-backend.vercel.app'  // No trailing slash
-    : 'http://localhost:4800'
-  );
-
-console.log('🔍 API Base URL:', API_BASE); // Debug log
+// Simple hardcoded approach that works with Vercel builds
+const API_BASE = process.env.NODE_ENV === 'production' 
+  ? 'https://byc-backend.vercel.app'
+  : 'http://localhost:4800';
 
 const axiosInstance = axios.create({
   baseURL: API_BASE,
@@ -18,7 +14,6 @@ const axiosInstance = axios.create({
   },
 });
 
-// Rest of your interceptors remain the same...
 axiosInstance.interceptors.request.use(
   (config) => {
     const userToken = localStorage.getItem('token');
@@ -28,7 +23,7 @@ axiosInstance.interceptors.request.use(
 
     const adminToken = localStorage.getItem('adminToken');
     const adminRoutes = ['/api/admin', '/api/product/add', '/api/product/stock'];
-    if (adminToken && adminRoutes.some((route) => config.url.includes(route))) {
+    if (adminToken && adminRoutes.some((route) => config.url?.includes(route))) {
       config.headers['x-auth-token'] = adminToken;
     }
 
@@ -48,5 +43,13 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const setAuthToken = (token) => {
+  if (token) {
+    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  } else {
+    delete axiosInstance.defaults.headers.common['Authorization'];
+  }
+};
 
 export default axiosInstance;
