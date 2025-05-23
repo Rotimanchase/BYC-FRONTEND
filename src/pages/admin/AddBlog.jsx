@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { assets } from '../../assets/assets';
 import axiosInstance from '../../../axios';
 import toast from 'react-hot-toast';
 
@@ -9,9 +8,9 @@ const AddBlog = () => {
     blogDescription: '',
     authorName: '',
     authorTitle: '',
+    blogImage: '',
+    authorImage: '',
   });
-  const [blogImage, setBlogImage] = useState(null);
-  const [authorImage, setAuthorImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
@@ -19,23 +18,12 @@ const AddBlog = () => {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleFileChange = (e, type) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-      if (type === 'blogImage') {
-        setBlogImage(file);
-      } else if (type === 'authorImage') {
-        setAuthorImage(file);
-      }
-    } else {
-      toast.error('Please upload a valid image file.');
-    }
-  };
-
   const validateForm = () => {
-    const { blogTitle, blogDescription, authorName, authorTitle } = formData;
-    if (!blogImage) return 'Blog image is required.';
-    if (!authorImage) return 'Author image is required.';
+    const { blogTitle, blogDescription, authorName, authorTitle, blogImage, authorImage } = formData;
+    if (!blogImage || !blogImage.startsWith('https://res.cloudinary.com/'))
+      return 'A valid Cloudinary blog image URL is required.';
+    if (!authorImage || !authorImage.startsWith('https://res.cloudinary.com/'))
+      return 'A valid Cloudinary author image URL is required.';
     if (!blogTitle || blogTitle.length < 5 || blogTitle.length > 255)
       return 'Blog title must be between 5 and 255 characters.';
     if (blogDescription && blogDescription.length < 5)
@@ -56,31 +44,23 @@ const AddBlog = () => {
     }
 
     setLoading(true);
-    const data = new FormData();
-    data.append('images', blogImage);
-    data.append('images', authorImage);
-    data.append('blogTitle', formData.blogTitle);
-    data.append('blogDescription', formData.blogDescription);
-    data.append('authorName', formData.authorName);
-    data.append('authorTitle', formData.authorTitle);
+    const data = { ...formData };
 
-    // Log FormData contents
-    console.log('FormData contents:');
-    for (let [key, value] of data.entries()) {
-      console.log(`  ${key}: ${value instanceof File ? `${value.name} (${value.type}, ${value.size} bytes)` : value}`);
-    }
 
     try {
-      console.log('Sending request to /api/blog/create');
       const response = await axiosInstance.post('/api/blog/create', data, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: { 'Content-Type': 'application/json' },
       });
-      console.log('Response:', response.data);
       if (response.data.success) {
         toast.success('Blog created successfully!');
-        setFormData({ blogTitle: '', blogDescription: '', authorName: '', authorTitle: '' });
-        setBlogImage(null);
-        setAuthorImage(null);
+        setFormData({
+          blogTitle: '',
+          blogDescription: '',
+          authorName: '',
+          authorTitle: '',
+          blogImage: '',
+          authorImage: '',
+        });
       } else {
         toast.error(response.data.message || 'Failed to create blog.');
       }
@@ -100,26 +80,19 @@ const AddBlog = () => {
   return (
     <div className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll flex flex-col justify-between">
       <form onSubmit={handleSubmit} className="md:p-10 p-4 space-y-5 max-w-lg">
-        <div>
-          <p className="text-base font-medium">Blog Image</p>
-          <div className="flex items-center gap-3 mt-2">
-            <label htmlFor="blogImage">
-              <input
-                onChange={(e) => handleFileChange(e, 'blogImage')}
-                accept="image/*"
-                type="file"
-                id="blogImage"
-                hidden
-              />
-              <img
-                className="max-w-24 cursor-pointer"
-                src={blogImage ? URL.createObjectURL(blogImage) : assets.uploadArea}
-                alt="Blog Image"
-                width={100}
-                height={100}
-              />
-            </label>
-          </div>
+        <div className="flex flex-col gap-1 max-w-md">
+          <label className="text-base font-medium" htmlFor="blogImage">
+            Blog Image URL
+          </label>
+          <input
+            id="blogImage"
+            type="text"
+            value={formData.blogImage}
+            onChange={handleInputChange}
+            placeholder="Enter Cloudinary blog image URL"
+            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+            required
+          />
         </div>
         <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="blogTitle">
@@ -148,26 +121,19 @@ const AddBlog = () => {
             placeholder="Enter blog description"
           />
         </div>
-        <div>
-          <p className="text-base font-medium">Author Image</p>
-          <div className="flex items-center gap-3 mt-2">
-            <label htmlFor="authorImage">
-              <input
-                onChange={(e) => handleFileChange(e, 'authorImage')}
-                accept="image/*"
-                type="file"
-                id="authorImage"
-                hidden
-              />
-              <img
-                className="max-w-24 cursor-pointer"
-                src={authorImage ? URL.createObjectURL(authorImage) : assets.uploadArea}
-                alt="Author Image"
-                width={100}
-                height={100}
-              />
-            </label>
-          </div>
+        <div className="flex flex-col gap-1 max-w-md">
+          <label className="text-base font-medium" htmlFor="authorImage">
+            Author Image URL
+          </label>
+          <input
+            id="authorImage"
+            type="text"
+            value={formData.authorImage}
+            onChange={handleInputChange}
+            placeholder="Enter Cloudinary author image URL"
+            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+            required
+          />
         </div>
         <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="authorName">

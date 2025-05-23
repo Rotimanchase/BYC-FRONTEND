@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../axios';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../context/appContext';
 
 const Account = () => {
   const [email, setEmail] = useState('');

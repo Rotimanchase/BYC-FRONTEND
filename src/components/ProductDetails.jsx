@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axiosInstance from "../../axios";
 import Modifycart from "../pages/ModifyCart";
 import { useAppContext } from '../context/appContext';
@@ -183,7 +183,7 @@ const ProductDetail = () => {
                     </form>
                     {!isAuthenticated && (
                         <p className="mt-2 text-sm text-gray-600">
-                            Please <a href="/login" className="text-blue-500">log in</a> to submit a review.
+                            Please <Link to="/login" className="text-blue-500">log in</Link> to submit a review.
                         </p>
                     )}
                 </div>

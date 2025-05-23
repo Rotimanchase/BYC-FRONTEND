@@ -1,14 +1,15 @@
 import React from 'react'
 import { aboutRecords, assets } from '../assets/assets'
 import RecentlyView from '../components/RecentlyView'
+import { Link } from 'react-router-dom'
 
 const About = () => {
   return (
     <>
         <div className="flex items-center space-x-2 text-sm text-gray-500 bg-white py-8 pl-15">
-            <a href='/' type="button">
+            <Link to='/' type="button">
                 <p>Home</p>
-            </a>
+            </Link>
             <svg width="8" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="m1 15 7.875-7L1 1" stroke="#6B7280" stroke-opacity=".8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>

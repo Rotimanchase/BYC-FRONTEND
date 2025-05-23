@@ -89,10 +89,13 @@ import orderIcon from './order_icon.svg'
 import addIcon from './add_icon.svg'
 import productIcon from './product_list_icon.svg'
 import uploadArea from './upload_area.png'
+import totalIcon from './totalProductIcon.svg'
+import totalPRev from './totslProductRevenue.svg'
+import dashIcon from './dashboardIcon.svg'
 
 export const assets = {byc, wvector, modplus, modminus, wcart, wheart, wuser, mnum, bbox, w2box, w1box, mplus, msize, mstar1, snav, mstar2, bxs1, mrater, mrange, marrowl, marrowr, mboxers, mboxer,  checkpay, round1, round2, bxs2, wishlove, cboxer, cplus, cartdel, wishcart, bxs3, bxs4, bxs5, vector, heart, cart, user, pay, phone, mail, fb, insta, twi, yt, fleft,fmid, fright, sleft, smid, sright, ttr, tbl, tbr,
      arrowleft, footarrow, recent, redvec, lcard, arrowright, pic1, pic2, pic3, lastl, firstimg, lastm, lastr, apic11, lpic, eye, lasth,
-      larrow, bfirst, uploadArea, bsecond, address, mcart, phn, whitearrow, maile, conta, star, bfoot, b3, blog2, apic1, apic2, orderIcon, addIcon, productIcon}
+      larrow, dashIcon, bfirst, uploadArea, totalIcon, totalPRev, bsecond, address, mcart, phn, whitearrow, maile, conta, star, bfoot, b3, blog2, apic1, apic2, orderIcon, addIcon, productIcon}
 
 
 

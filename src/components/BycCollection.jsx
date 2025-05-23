@@ -4,7 +4,7 @@ import { assets } from '../assets/assets'
 const BycCollection = () => {
   return (
     <>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 mt-20 gap-3 md:mx-15 mx-8'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 mt-20 gap-3 md:mx-15 mr-10 ml-5'>
       <div className="box-border border-0 h-full md:h-full bg-[#F1F1F1] flex items-center justify-center py-15 md:py-10 lg:py-18">
         <div className="text-left space-y-3 px-4 md:max-w-xl">
             <h2 className="md:text-xl lg:text-4xl text-1xl font-bold text-gray-600">BYC Collection 2021</h2>

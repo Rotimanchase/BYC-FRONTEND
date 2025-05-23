@@ -35,7 +35,7 @@ const TopContent = () => {
           </Link>
         </div>
 
-        <div className='flex justify-center mt-15'>
+        <div className='flex justify-center mt-15 mx-5'>
             <img className='w-95 md:w-250' src={assets.firstimg} alt="" />
         </div>
       </div>

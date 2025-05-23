@@ -13,7 +13,6 @@ const ProductList = () => {
       try {
         const response = await axiosInstance.get('/api/product');
         if (response.data.success) {
-          console.log('Fetched products:', response.data.products);
           setProducts(response.data.products || []);
         } else {
           toast.error(response.data.message || 'Failed to fetch products');
@@ -29,7 +28,6 @@ const ProductList = () => {
   }, []);
 
   const handleStockToggle = async (productId, currentStockStatus) => {
-    console.log('Toggling stock for product:', productId, 'Current status:', currentStockStatus);
     try {
       const response = await axiosInstance.post('/api/product/stock', {
         productId,
@@ -42,10 +40,8 @@ const ProductList = () => {
           )
         );
         toast.success('Stock status updated!');
-        console.log('Stock update response:', response.data);
       } else {
         toast.error(response.data.message || 'Failed to update stock status');
-        console.log('Stock update failed:', response.data);
       }
     } catch (error) {
       console.error('Error updating stock:', error.response?.data || error.message);
@@ -77,7 +73,6 @@ const ProductList = () => {
                   </tr>
                 ) : (
                   products.map((product) => {
-                    console.log('Rendering product:', product.productName, 'Images:', product.productImage);
                     return (
                       <tr key={product._id} className="border-t border-gray-500/20">
                         <td className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate">
@@ -85,13 +80,16 @@ const ProductList = () => {
                             <img
                               src={
                                 product.productImage && product.productImage.length > 0
-                                  ? `http://localhost:4800${product.productImage[0]}`
-                                  : 'https://via.placeholder.com/64'
+                                  ? product.productImage[0]
+                                  : 'null'
                               }
                               alt={product.productName}
                               className="w-16"
-                              onError={(e) => { console.error('Image load error:', product.productImage[0]);
-                                e.target.src = 'https://via.placeholder.com/64';}} />
+                              onError={(e) => {
+                                console.error('Image load error:', product.productImage[0]);
+                                e.target.src = 'https://via.placeholder.com/64';
+                              }}
+                            />
                           </div>
                           <span className="truncate max-sm:hidden w-full">{product.productName}</span>
                         </td>

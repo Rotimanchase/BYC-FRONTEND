@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { assets } from '../../assets/assets';
 import { useAppContext } from '../../context/appContext';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -9,7 +8,7 @@ const AddProduct = () => {
   const { isAdmin } = useAppContext();
   const navigate = useNavigate();
 
-  const [files, setFiles] = useState([]);
+  const [imageUrls, setImageUrls] = useState(['']); // Array for multiple image URLs
   const [productName, setProductName] = useState('');
   const [productNumber, setProductNumber] = useState('');
   const [category, setCategory] = useState('');
@@ -18,7 +17,7 @@ const AddProduct = () => {
   const [productDescription, setProductDescription] = useState('');
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
-  const [stock, setStock] = useState([]); // New state for size/color stock
+  const [stock, setStock] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const categories = [
@@ -35,23 +34,22 @@ const AddProduct = () => {
     return null;
   }
 
-  const handleFileChange = (e, index) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const handleImageUrlChange = (index, value) => {
+    const updatedUrls = [...imageUrls];
+    updatedUrls[index] = value;
+    setImageUrls(updatedUrls);
+  };
 
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please upload an image file');
-      return;
+  const addImageUrlField = () => {
+    if (imageUrls.length < 4) {
+      setImageUrls([...imageUrls, '']);
+    } else {
+      toast.error('Maximum 4 images allowed');
     }
+  };
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image size must be less than 5MB');
-      return;
-    }
-
-    const updatedFiles = [...files];
-    updatedFiles[index] = file;
-    setFiles(updatedFiles);
+  const removeImageUrlField = (index) => {
+    setImageUrls(imageUrls.filter((_, i) => i !== index));
   };
 
   const handleSizeChange = (size) => {
@@ -88,9 +86,10 @@ const AddProduct = () => {
       !productPrice ||
       !productStock ||
       !productDescription ||
-      files.length === 0
+      imageUrls.length === 0 ||
+      imageUrls.every((url) => !url.trim())
     ) {
-      toast.error('Please fill all required fields and upload at least one image');
+      toast.error('Please fill all required fields and provide at least one image URL');
       return;
     }
 
@@ -121,32 +120,38 @@ const AddProduct = () => {
       return;
     }
 
-    setIsLoading(true);
-    const formData = new FormData();
-    formData.append('productName', productName);
-    formData.append('productNumber', productNumber);
-    formData.append('category', category);
-    formData.append('productPrice', productPrice);
-    formData.append('productStock', productStock);
-    formData.append('productDescription', productDescription);
-    sizes.forEach((size) => formData.append('sizes[]', size));
-    colors.forEach((color) => formData.append('colors[]', color));
-    formData.append('stock', JSON.stringify(stock));
-    files.forEach((file, index) => {
-      if (file) formData.append('images', file);
-    });
+    // Validate image URLs
+    const validUrls = imageUrls.filter((url) => url.trim()).map((url) => url.trim());
+    for (const url of validUrls) {
+      if (!url.startsWith('https://res.cloudinary.com/')) {
+        toast.error('Please provide valid Cloudinary image URLs');
+        return;
+      }
+    }
 
-    console.log('FormData entries:', [...formData.entries()]);
+    setIsLoading(true);
+    const data = {
+      productName,
+      productNumber,
+      category,
+      productPrice,
+      productStock,
+      productDescription,
+      sizes,
+      colors,
+      stock,
+      productImage: validUrls,
+    };
 
     try {
-      const response = await axiosInstance.post('/api/product/add', formData, {
+      const response = await axiosInstance.post('/api/product/add', data, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         },
       });
       if (response.data.success) {
         toast.success('Product added successfully!');
-        setFiles([]);
+        setImageUrls(['']);
         setProductName('');
         setProductNumber('');
         setCategory('');
@@ -171,27 +176,37 @@ const AddProduct = () => {
     <div className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll flex flex-col justify-between">
       <form onSubmit={handleSubmit} className="md:p-10 p-4 space-y-5 max-w-lg">
         <div>
-          <p className="text-base font-medium">Product Images</p>
-          <div className="flex flex-wrap items-center gap-3 mt-2">
-            {Array(4)
-              .fill('')
-              .map((_, index) => (
-                <label key={index} htmlFor={`image${index}`}>
-                  <input
-                    onChange={(e) => handleFileChange(e, index)}
-                    accept="image/*"
-                    type="file"
-                    id={`image${index}`}
-                    hidden />
-                  <img
-                    className="max-w-24 cursor-pointer"
-                    src={files[index] ? URL.createObjectURL(files[index]) : assets.uploadArea}
-                    alt="uploadArea"
-                    width={100}
-                    height={100}
-                  />
-                </label>
-              ))}
+          <p className="text-base font-medium">Product Image URLs</p>
+          <div className="space-y-2 mt-2">
+            {imageUrls.map((url, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={url}
+                  onChange={(e) => handleImageUrlChange(index, e.target.value)}
+                  placeholder="Enter Cloudinary image URL"
+                  className="flex-1 outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+                />
+                {imageUrls.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeImageUrlField(index)}
+                    className="text-red-500"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            ))}
+            {imageUrls.length < 4 && (
+              <button
+                type="button"
+                onClick={addImageUrlField}
+                className="text-blue-500"
+              >
+                Add Another URL
+              </button>
+            )}
           </div>
         </div>
         <div className="flex flex-col gap-1 max-w-md">

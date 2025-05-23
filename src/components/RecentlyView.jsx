@@ -50,7 +50,7 @@ const RecentlyView = () => {
           </Link>
         </div>
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-5 gap-4 border-t-3 border-[#F1EEEE]'>
+      <div className='grid grid-cols-2 md:grid-cols-5 gap-4 border-t-3 border-[#F1EEEE]'>
         {loading ? (
           <div className='col-span-5 text-center py-8'>
             <p className='text-gray-600'>Loading recently viewed products...</p>
@@ -63,31 +63,25 @@ const RecentlyView = () => {
           recentlyViewed.map((product) => (
             <div
               key={product._id}
-              className='hover:-translate-y-[5px] hover:shadow-2xl transition duration-300 md:pt-8 pt-3 rounded'
-            >
+              className='hover:-translate-y-[5px] hover:shadow-2xl transition duration-300 md:pt-8 pt-3 rounded'>
               <Link to={`/product/${product._id}`}>
                 <img
-                  className='w-full rounded-t-[5px]'
+                  className='w-full rounded-t-[5px] md:h-60 h-40'
                   src={
-                    product.productImage && Array.isArray(product.productImage) && product.productImage.length > 0
-                      ? `http://localhost:4800${product.productImage[0]}`
+                    product.productImage && product.productImage.length > 0
+                      ? product.productImage[0]
                       : '/placeholder.jpg'
                   }
-                  alt={product.productName || 'Product'}
-                />
+                  alt={product.productName}/>
               </Link>
-              <h5 className='text-xl pl-3 mt-3 mb-1 font-bold'>{product.productName || 'Unnamed Product'}</h5>
-              <p className='text-[18px] pl-3 mb-4'>{product.productNumber || 'N/A'}</p>
-              {product.productDescription
-                ? product.productDescription.split('  ').map((sentence, index) =>
-                    sentence.trim() && (
-                      <p key={index} className="pl-3 text-[#787885]">
-                        {sentence.trim()}
-                      </p>
-                    )
-                  )
-                : <p className="pl-3 text-[#787885]">No description available</p>}
-              <p className='pl-3 font-semibold mt-3 mb-5'>
+              <h5 className='md:text-xl pl-3 mt-3 mb-1 font-bold'>{product.productName || 'Unnamed Product'}</h5>
+              <p className='md:text-[18px] pl-3 mb-4'>{product.productNumber}</p>
+              <div className="overflow-hidden pl-3">
+                <p className="text-gray-500 md:text-sm text-xs line-clamp-2 md:line-clamp-3">
+                  {product.productDescription}
+                </p>
+              </div>
+              <p className='pl-3 md:text-xl text-sm font-semibold mt-3 mb-5'>
                 ₦{product.productPrice ? product.productPrice.toLocaleString() : '0'}
               </p>
               <div className='flex items-center pl-3 mb-5'>
@@ -102,7 +96,7 @@ const RecentlyView = () => {
                     )}
                   </span>
                 ))}
-                <p className='ml-2'>{product.ratings ? product.ratings.toFixed(1) : '0.0'}</p>
+                <p className='ml-2 text-xs md:text-sm'>{product.ratings ? product.ratings.toFixed(1) : '0.0'}</p>
               </div>
             </div>
           ))

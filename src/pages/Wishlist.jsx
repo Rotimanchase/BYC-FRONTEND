@@ -51,9 +51,9 @@ const Wishlist = () => {
   return (
     <div className='mt-10'>
       <div className="flex items-center space-x-2 text-sm text-gray-500 bg-white py-8 pl-5 md:pl-15">
-        <a href='/' type="button">
+        <Link to='/' type="button">
           <p>Home</p>
-        </a>
+        </Link>
         <span>/</span>
         <p className='text-red-500'>Wishlist</p>
       </div>
@@ -80,15 +80,9 @@ const Wishlist = () => {
                   <img
                     className='rounded-t-[5px] w-full'
                     src={
-                      category.productImage
-                        ? Array.isArray(category.productImage)
-                          ? `http://localhost:4800${category.productImage[0]}`
-                          : typeof category.productImage === 'string'
-                            ? `http://localhost:4800${category.productImage.split(',')[0]}`
-                            : '/placeholder.jpg'
-                        : category.image
-                          ? `http://localhost:4800${category.image}`
-                          : '/placeholder.jpg'
+                      category.productImage && Array.isArray(category.productImage) && category.productImage.length > 0
+                        ? category.productImage[0]
+                        : '/placeholder.jpg'
                     }
                     alt={category.productName || 'Product Image'}
                   />

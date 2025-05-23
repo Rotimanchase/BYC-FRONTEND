@@ -27,6 +27,8 @@ import ProductList from './pages/admin/ProductList'
 import OrdersPage from './pages/admin/OrdersPage'
 import { useAppContext } from './context/appContext'
 import AdminProducts from './pages/admin/adminProducts'
+import Dashboard from './pages/admin/Dashboard'
+import PaymentSuccess from './pages/PaymentSuccess'
 
 
 const Display = () => {
@@ -58,15 +60,15 @@ const Display = () => {
               <Route path='/wishlist' element={<Wishlist/>}/>
               <Route path='/my-orders' element={<MyOrders/>}/>
               <Route path="/product/:id" element={<ProductDetail />} />
-              <Route path="/modify/cart" element={<Navigate to="/cart" />} />
-              <Route path="/blogs/blogs" element={<Navigate to="/blogs" />} />
               <Route path='/admin' element={isAdmin ? <AdminLayout/> : <AdminLogin/>}>
-                <Route index element={isAdmin ? <AddProduct/> : null} />
+                <Route index element={isAdmin ? <Dashboard/> : null} />
+                <Route path='add-product' element={isAdmin ? <AddProduct/> : null} />
                 <Route path='blog' element={isAdmin ? <AddBlog/> : null}/>
                 <Route path='product-list' element={isAdmin ? <ProductList/> : null} />
                 <Route path='orders' element={isAdmin ? <OrdersPage/> : null}/>
                 <Route path='admin-product' element={isAdmin ? <AdminProducts/> : null}/>
               </Route>
+              <Route path="/payment-success" element={<PaymentSuccess />} />
           </Routes>
         </div>
         {!isAdminPath && <Footer/>}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { FiSearch, FiUser, FiHeart, FiShoppingCart } from 'react-icons/fi';
 import { assets } from '../assets/assets';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaChevronDown, FaSearch } from 'react-icons/fa';
 import { useAppContext } from '../context/appContext';
 import ProductNavigation from './ProductNavigation';
@@ -36,7 +36,6 @@ export default function Navbar() {
       const isOutsideUser = userDropdownRef.current && !userDropdownRef.current.contains(event.target);
       const isOutsideShop = shopDropdownRef.current && !shopDropdownRef.current.contains(event.target);
       if (isOutsideUser && isOutsideShop) {
-        console.log('Clicked outside, closing user menu and shop dropdown');
         setShowUserMenu(false);
         setShowShopDropdown(false);
       }
@@ -56,16 +55,20 @@ export default function Navbar() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const toggleSearch = () => setShowSearch(!showSearch);
+  // const toggleSearch = () => setShowSearch(!showSearch);
+  const toggleSearch = () => {
+    if (showSearch) {
+      setSearchQuery('');
+    }
+    setShowSearch(!showSearch);
+  };
 
   const toggleShopDropdown = () => {
-    console.log('Toggling shop dropdown, current state:', showShopDropdown);
     setShowShopDropdown(!showShopDropdown);
     setShowUserMenu(false);
   };
 
   const toggleUserMenu = () => {
-    console.log('Toggling user menu, current state:', showUserMenu);
     setShowUserMenu(!showUserMenu);
     setShowShopDropdown(false);
   };
@@ -77,26 +80,35 @@ export default function Navbar() {
     navigate('/account');
   };
 
+  
   useEffect(() => {
-    if (searchQuery.length > 0) {
-      navigate('/product');
+    const delay = setTimeout(() => {
+      if (searchQuery.length > 0 && location.pathname !== '/product') {
+        navigate('/product');
+      }
+    }, 300);
+  
+    return () => clearTimeout(delay);
+  }, [searchQuery, location.pathname]);
+  
+  useEffect(() => {
+    if (location.pathname !== '/product' && searchQuery) {
+      setSearchQuery('');
     }
-  }, [searchQuery, navigate]);
-
+  }, [location.pathname]);
+  
   return (
-    <nav className={`${isDarkBg ? 'bg-black text-white' : 'bg-white'} relative mx-5`}>
+    <nav className={`${isDarkBg ? 'bg-black text-white' : 'bg-white'} relative `}>
       <div className="flex items-center justify-center h-30 md:mx-8">
         {/* Left section */}
-        <div className="absolute z-10 left-4 space-x-6 md:flex hidden">
-          <button
-            onClick={toggleShopDropdown}
-            className={`${isDarkBg ? '' : 'text-gray-700 hover:text-black'}`}
-          >
+        <div className="absolute z-10 left-4 space-x-6 md:flex hidden ml-5">
+          <button onClick={toggleShopDropdown}
+            className={`${isDarkBg ? '' : 'text-gray-700 hover:text-black'} cursor-pointer`}>
             Shop Products
           </button>
-          <a href="blogs" className={`${isDarkBg ? '' : 'text-gray-700 hover:text-black'}`}>
+          <Link to="/Blogs" className={`${isDarkBg ? '' : 'text-gray-700 hover:text-black'}`}>
             Blog
-          </a>
+          </Link>
           <a href="#" className={`${isDarkBg ? '' : 'text-gray-700 hover:text-black'}`}>
             FAQ
           </a>
@@ -104,23 +116,18 @@ export default function Navbar() {
 
         {/* Center Logo */}
         {!showSearch ? (
-          <div className="flex md:justify-center justify-left md:ml-0 ml-5 w-full md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
-            <a href="/" className="text-xl font-bold">
+          <div className="flex md:justify-center justify-left cursor-pointer md:ml-0 ml-5 w-full md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
+            <Link to="/" className="text-xl font-bold">
               <img src={assets.byc} alt="Logo" className="h-11 w-18" />
-            </a>
+            </Link>
           </div>
         ) : (
-          <div
-            className={`flex items-center border-b pb-1 w-[40%] ${
-              isDarkBg ? 'border-white' : 'border-gray-500'
-            }`}
-          >
-            <input
-              onChange={(e) => setSearchQuery(e.target.value)}
+          <div className={`flex items-center border-b pb-1 w-[40%] ${
+              isDarkBg ? 'border-white' : 'border-gray-500' }`} >
+            <input onChange={(e) => setSearchQuery(e.target.value)}
               type="text"
               placeholder="Search Product"
-              className="bg-transparent border-none w-full focus:outline-none"
-            />
+              className="bg-transparent border-none w-full focus:outline-none"/>
             <button onClick={() => setShowSearch(false)} className="p-0 ml-2">
               <FaSearch />
             </button>
@@ -128,19 +135,17 @@ export default function Navbar() {
         )}
 
         {/* Right section */}
-        <div className="absolute right-4 md:flex hidden items-center space-x-6 text-gray-700">
-          <a
-            href="about"
-            className={`${isDarkBg ? 'text-white' : 'text-gray-700 hover:text-black'}`}
-          >
+        <div className="absolute right-4 md:flex hidden items-center space-x-6 text-gray-700 mr-5">
+          <Link
+            to="/about"
+            className={`${isDarkBg ? 'text-white' : 'text-gray-700 hover:text-black'}`} >
             About Us
-          </a>
-          <a
-            href="contact"
-            className={`${isDarkBg ? 'text-white' : 'text-gray-700 hover:text-black'}`}
-          >
+          </Link>
+          <Link
+            to="/contact"
+            className={`${isDarkBg ? 'text-white' : 'text-gray-700 hover:text-black'}`}>
             Contact
-          </a>
+          </Link>
           {!showSearch && (
             <button onClick={toggleSearch}>
               <FiSearch
@@ -155,8 +160,7 @@ export default function Navbar() {
                 className={`flex items-center gap-2 cursor-pointer ${
                   isDarkBg ? 'text-white' : 'hover:text-black'
                 }`}
-                onClick={toggleUserMenu}
-              >
+                onClick={toggleUserMenu}>
                 <FiUser className="w-5 h-5" />
                 <span className="text-sm font-medium">
                   Hi {user.name || user.username || 'User'}
@@ -167,14 +171,12 @@ export default function Navbar() {
                 <div className="absolute top-6 right-0 bg-white text-black shadow-lg p-2 text-sm rounded-md z-100">
                   <button
                     onClick={() => navigate('/my-orders')}
-                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
-                  >
+                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left" >
                     My Orders
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
-                  >
+                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left">
                     Logout
                   </button>
                 </div>
@@ -188,12 +190,12 @@ export default function Navbar() {
             </button>
           )}
 
-          <a href="wishlist">
+          <Link to="wishlist">
             <FiHeart
               className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
             />
-          </a>
-          <a href="cart" className="relative">
+          </Link>
+          <Link to="cart" className="relative">
             <FiShoppingCart
               className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
             />
@@ -202,7 +204,7 @@ export default function Navbar() {
                 {cart.reduce((total, item) => total + item.quantity, 0)}
               </span>
             )}
-          </a>
+          </Link>
         </div>
 
         {/* Mobile Hamburger */}
@@ -240,10 +242,7 @@ export default function Navbar() {
       {/* Mobile Dropdown */}
       {isOpen && (
         <div className="md:hidden px-4 pb-4 space-y-2 text-gray-700">
-          <button
-            onClick={toggleShopDropdown}
-            className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
-          >
+          <button onClick={toggleShopDropdown} className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`} >
             Shop Products
           </button>
           {showShopDropdown && (
@@ -251,41 +250,28 @@ export default function Navbar() {
               <ProductNavigation compact={true} />
             </div>
           )}
-          <a
-            href="blogs"
-            className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
-          >
+          <Link
+            to="blogs"
+            className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`}>
             Blog
-          </a>
+          </Link>
           <a href="#" className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`}>
             FAQ
           </a>
-          <a
-            href="about"
-            className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
-          >
+          <Link to="about" className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`}>
             About Us
-          </a>
-          <a
-            href="contact"
-            className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
-          >
+          </Link>
+          <Link to="contact" className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`} >
             Contact
-          </a>
+          </Link>
           <div className="flex space-x-4 pt-2">
             <button onClick={toggleSearch}>
-              <FiSearch
-                className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
-              />
+              <FiSearch className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`} />
             </button>
             {user ? (
               <div className="relative" ref={userDropdownRef}>
-                <div
-                  className={`flex items-center gap-2 cursor-pointer ${
-                    isDarkBg ? 'text-white' : 'hover:text-black'
-                  }`}
-                  onClick={toggleUserMenu}
-                >
+                <div className={`flex items-center gap-2 cursor-pointer ${ isDarkBg ? 'text-white' : 'hover:text-black'
+                  }`} onClick={toggleUserMenu} >
                   <FiUser className="w-5 h-5" />
                   <span className="text-sm font-medium">
                     Hi {user.name || user.username || 'User'}
@@ -294,16 +280,10 @@ export default function Navbar() {
 
                 {showUserMenu && (
                   <div className="absolute top-6 right-0 bg-white text-black shadow-lg p-2 text-sm rounded-md z-100">
-                    <button
-                      onClick={() => navigate('/my-orders')}
-                      className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
-                    >
+                    <button onClick={() => navigate('/my-orders')} className="block px-4 py-2 hover:bg-gray-100 w-full text-left">
                       My Orders
                     </button>
-                    <button
-                      onClick={handleLogout}
-                      className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
-                    >
+                    <button onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100 w-full text-left" >
                       Logout
                     </button>
                   </div>
@@ -311,26 +291,20 @@ export default function Navbar() {
               </div>
             ) : (
               <button onClick={() => navigate('/account')}>
-                <FiUser
-                  className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
-                />
+                <FiUser className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}/>
               </button>
             )}
-            <a href="wishlist">
-              <FiHeart
-                className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
-              />
-            </a>
-            <a href="cart" className="relative">
-              <FiShoppingCart
-                className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
-              />
+            <Link to="wishlist">
+              <FiHeart className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`} />
+            </Link>
+            <Link to="cart" className="relative">
+              <FiShoppingCart className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}/>
               {Array.isArray(cart) && cart.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
                   {cart.reduce((total, item) => total + item.quantity, 0)}
                 </span>
               )}
-            </a>
+            </Link>
           </div>
         </div>
       )}

@@ -9,10 +9,8 @@ import { Link } from 'react-router-dom';
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const blogsPerPage = 3; // Adjusted for single-column layout
-  const BASE_URL = 'http://localhost:4800'; // Backend base URL
+  const blogsPerPage = 3;
 
-  // Fetch blogs
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
@@ -28,7 +26,6 @@ const Blog = () => {
     fetchBlogs();
   }, []);
 
-  // Increment views for the current page's blogs, only if not viewed this session
   useEffect(() => {
     const incrementViews = async () => {
       const viewedBlogs = JSON.parse(localStorage.getItem('viewedBlogs')) || [];
@@ -55,7 +52,7 @@ const Blog = () => {
       }
     };
 
-    if (blogs.length > 0 && currentPage === 1) incrementViews(); // Run only on first page load
+    if (blogs.length > 0 && currentPage === 1) incrementViews();
   }, [blogs, currentPage]);
 
   const handleLike = async (id) => {
@@ -81,13 +78,11 @@ const Blog = () => {
     }
   };
 
-  // Truncate description to ~150 characters
   const truncateDescription = (description, maxLength = 150) => {
     if (description.length <= maxLength) return description;
     return description.slice(0, maxLength).trim() + '...';
   };
 
-  // Pagination logic
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
   const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
@@ -102,10 +97,9 @@ const Blog = () => {
       {currentBlogs.map((item, index) => (
         <div
           key={item._id}
-          className={`flex flex-col lg:flex-row ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} mb-16 gap-6`}
-        >
+          className={`flex flex-col lg:flex-row ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} mb-16 gap-6`} >
           <Link to={`/blogs/${item._id}`} className="w-full lg:w-1/2">
-            <img src={`${BASE_URL}${item.blogImage}`} alt="blog" className="w-full h-full object-cover" />
+            <img src={item.blogImage} alt="blog" className="w-full md:h-150 object-cover" />
           </Link>
           <div className="w-full lg:w-1/2 px-4">
             <h3 className="md:text-4xl text-1xl font-bold mb-5 md:mb-18 mt-5">{item.blogTitle}</h3>
@@ -120,7 +114,7 @@ const Blog = () => {
             </div>
             <div className="flex items-center gap-8 lg:gap-15 md:gap-6 bg-[#E0E0E0] w-63 lg:w-100 md:w-60 mt-4 md:mt-10 mb-1 p-2">
               <img
-                src={`${BASE_URL}${item.authorImage}`}
+                src={item.authorImage}
                 alt="author"
                 className="w-10 h-10 rounded-full object-cover"
               />

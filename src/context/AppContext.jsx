@@ -218,11 +218,11 @@ export const AppProvider = ({ children }) => {
     }
   }, [isLoading, user, fetchWishlist]);
 
-  const clearCart = useCallback(() => {
+  const clearCart = () => {
     setCart([]);
-  }, []);
+  };
 
-  const logout = useCallback(() => {
+  const logout = () => {
     localStorage.removeItem('adminToken');
     localStorage.removeItem('token');
     localStorage.removeItem('recentlyViewed');
@@ -231,7 +231,7 @@ export const AppProvider = ({ children }) => {
     setCart([]);
     setWishlist([]);
     setRecentlyViewed([]);
-  }, []);
+  };
 
   const fetchRecentlyViewed = useCallback(async () => {
     try {
@@ -353,10 +353,9 @@ export const AppProvider = ({ children }) => {
     }
   }, [user]);
 
-  const refreshProducts = useCallback(async () => {
-    // Placeholder for product refresh logic
-    console.log('Refreshing products');
-  }, []);
+  const refreshProducts = async () => {
+    // console.log('Refreshing products');
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('adminToken');

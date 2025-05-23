@@ -48,7 +48,7 @@ const AdminProducts = () => {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 no-scrollbar flex-1 h-[95vh] overflow-y-scroll">
       <h2 className="text-2xl font-bold mb-6">Manage Products</h2>
       {products.map((product) => (
         <div key={product._id} className="mb-6 border p-4 rounded">

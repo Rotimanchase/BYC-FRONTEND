@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axiosInstance from '../../../axios'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { useAppContext } from '../../context/AppContext'
+import { useAppContext } from '../../context/appContext'
 
 const AdminLogin = () => {
     const { isAdmin, setIsAdmin } = useAppContext()
@@ -15,10 +15,8 @@ const AdminLogin = () => {
   try {
     event.preventDefault();
     const res = await axiosInstance.post('/api/admin/login', { email, password });
-    console.log('Login response:', res.data); // Debug the response
     if (res.data.success) {
       localStorage.setItem('adminToken', res.data.token);
-      console.log('Token saved:', res.data.token); // Confirm token is saved
       setIsAdmin(true);
       navigate('/admin');
     } else {
@@ -30,12 +28,6 @@ const AdminLogin = () => {
   }
 };
 
-    //   const handleLogout = () => {
-    //     localStorage.removeItem('adminToken');
-    //     setIsAdmin(false);
-    //     navigate('/admin/login');
-    //   };
-    
     useEffect(()=>{
         if(isAdmin){
             navigate("/admin")

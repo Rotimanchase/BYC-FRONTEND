@@ -4,7 +4,7 @@ import { FaMinus, FaPlus, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/f
 import ProductRatings from "../components/ProductRatings";
 import { useAppContext } from "../context/appContext";
 import toast from "react-hot-toast";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axiosInstance from "../../axios";
 
 const Modifycart = ({ product: propProduct }) => {
@@ -18,7 +18,6 @@ const Modifycart = ({ product: propProduct }) => {
   const [count, setCount] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
   const [error, setError] = useState(null);
-  // const [showAllStock, setShowAllStock] = useState(false);
 
   useEffect(() => {
     if (propProduct) {
@@ -30,9 +29,7 @@ const Modifycart = ({ product: propProduct }) => {
     } else {
       const fetchProduct = async () => {
         try {
-          console.log("Fetching product with ID:", id);
           const response = await axiosInstance.get(`/api/product/${id}`);
-          console.log("Product fetch response:", JSON.stringify(response.data, null, 2));
           if (response.data.success) {
             const fetchedProduct = response.data.product;
             setProduct(fetchedProduct);
@@ -80,13 +77,12 @@ const Modifycart = ({ product: propProduct }) => {
       (entry) => entry.size === size && entry.color === color
     );
     const quantity = stockEntry ? stockEntry.quantity : 0;
-    console.log("Stock for", { size, color, quantity });
     return quantity;
   };
 
   const images = product?.productImage?.length > 0
-    ? product.productImage.map(img => `http://localhost:4800${img}`)
-    : [assets.bbox];
+    ? product.productImage
+    : ['/placeholder.jpg'];
 
   const handlePrev = () => {
     if (images.length <= 1) return;
@@ -155,41 +151,24 @@ const Modifycart = ({ product: propProduct }) => {
       return;
     }
     try {
-      console.log("Updating cart with:", {
-        productId: product._id,
-        quantity: count,
-        size: selectedSize,
-        color: selectedColor,
-      });
-
       const existingItems = cart.filter(
         (item) =>
           item.productId._id === product._id &&
           (item.size || null) === (selectedSize || null) &&
           (item.color || null) === (selectedColor || null)
       );
-      console.log("Found existing items:", existingItems);
 
       if (existingItems.length > 0) {
         for (const item of existingItems) {
-          console.log("Removing existing item:", item);
           await removeFromCart(product._id, selectedSize, selectedColor);
         }
       }
 
       await addToCart(product._id, count, selectedSize, selectedColor);
-      console.log("Added item:", {
-        productId: product._id,
-        quantity: count,
-        size: selectedSize,
-        color: selectedColor,
-      });
-
       await fetchCart();
-      console.log("Fetched cart after update:", cart);
-      toast.success("Cart updated successfully!");
       navigate("/cart");
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error updating cart:", error.response?.data || error.message);
       toast.error(error.response?.data?.message || "Failed to update cart.");
     }
@@ -201,9 +180,9 @@ const Modifycart = ({ product: propProduct }) => {
   return (
     <div className="md:mx-15 mt-10">
       <div className="flex items-center space-x-2 text-sm text-gray-500 bg-white py-8 pl-5 md:pl-0">
-        <a href="/" type="button">
+        <Link to="/" type="button">
           <p>Home</p>
-        </a>
+        </Link>
         <svg width="8" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="m1 15 7.875-7L1 1"
@@ -236,11 +215,16 @@ const Modifycart = ({ product: propProduct }) => {
 
       <div className="md:border-2 rounded border-[#F3F0F0] p-4 mb-10">
         <div className="flex flex-col lg:flex-row">
-          <div className="lg:w-152 w-93 flex flex-col items-center md:p-4">
+          <div className="lg:w-152 w-full flex flex-col items-center md:p-4">
             <img
               src={images[currentIndex]}
-              className="w-3/4 object-contain"
+              className="md:w-3/4 w-full object-contain"
               alt={`slide ${currentIndex + 1}`}
+              onError={(e) => {
+                console.error('Image load error:', images[currentIndex]);
+                e.target.src = '/placeholder.jpg';
+              }}
+              loading="lazy"
             />
             {images.length > 1 && (
               <div className="flex items-center justify-center mt-6 space-x-4">
@@ -264,15 +248,20 @@ const Modifycart = ({ product: propProduct }) => {
                   </svg>
                 </button>
                 <div className="md:flex space-x-2 hidden">
-                  {images.map((_, index) => (
+                  {images.map((img, index) => (
                     <img
                       key={index}
-                      src={images[index]}
+                      src={img}
                       className={`w-20 h-14 rounded cursor-pointer object-cover ${
                         currentIndex === index ? "border-2 border-red-500" : ""
                       }`}
                       onClick={() => handleThumbnailClick(index)}
                       alt={`thumb ${index}`}
+                      onError={(e) => {
+                        console.error('Thumbnail load error:', img);
+                        e.target.src = '/placeholder.jpg';
+                      }}
+                      loading="lazy"
                     />
                   ))}
                 </div>
@@ -302,17 +291,17 @@ const Modifycart = ({ product: propProduct }) => {
             <h2 className="text-3xl font-bold mb-4">{product?.productName || "MEN BOXERS BYC 1166"}</h2>
             <p className="text-lg mb-4">{product?.productDescription?.split(".")[0] || "100% Cotton 12 Pieces Of Mens Boxer"}</p>
             <div className="flex mb-6 items-center">
-            {[...Array(5)].map((_, i) => (
-              <span key={i}>
-                {i < Math.floor(product?.ratings || 0) ? (
-                  <FaStar className="text-yellow-500" />
-                ) : i < Math.ceil(product?.ratings || 0) && (product?.ratings % 1) >= 0.5 ? (
-                  <FaStarHalfAlt className="text-yellow-500" />
-                ) : (
-                  <FaRegStar className="text-gray-300" />
-                )}
-              </span>
-            ))}
+              {[...Array(5)].map((_, i) => (
+                <span key={i}>
+                  {i < Math.floor(product?.ratings || 0) ? (
+                    <FaStar className="text-yellow-500" />
+                  ) : i < Math.ceil(product?.ratings || 0) && (product?.ratings % 1) >= 0.5 ? (
+                    <FaStarHalfAlt className="text-yellow-500" />
+                  ) : (
+                    <FaRegStar className="text-gray-300" />
+                  )}
+                </span>
+              ))}
               <span className="ml-3">{product?.ratings?.toFixed(1) || "0.0"}</span>
             </div>
             <div className="border-t border-[#F3F0F0] pt-6">
@@ -389,13 +378,7 @@ const Modifycart = ({ product: propProduct }) => {
         <h3 className="text-xl font-bold m-5">Product Description</h3>
         <div className="border-t-2 border-[#F3F0F0]">
           <p className="text-gray-600 md:text-[19px] p-5">
-            {product?.productDescription ||
-              `This set of boxers will make you feel comfortable. The hem doesn't ravel. It is made from cotton which allows aeration around your body. It suitable for both adults and teenagers.
-              These pair of boxers give good fit and sits appropriately, they ensure there is no unsightly bulge and they also give support to an important part of your body, which overall improves
-              your confidence. It has a comfortable cotton material. It comes in different beautiful colors and patterns. It has cool and comfortable fit with flexible hem that doesn't ravel and comes
-              tag-free for maximum comfort. Soft breathable fabric for air movement and forms to your body for best Fit.
-              It is made of 100% premium cotton and is perfect for crotch, so you don't have to worry about ugly bumps.
-              For pure organic softness and premium lingerie support, pair this four-in-one suit with yourself or the special man in your life.`}
+            {product?.productDescription}
           </p>
         </div>
       </div>

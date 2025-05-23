@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../axios';
 import { currency } from '../assets/assets';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +22,6 @@ const MyOrders = () => {
 
     try {
       const { data } = await axiosInstance.get('/api/order/user');
-      console.log('Fetched orders:', JSON.stringify(data, null, 2));
       if (data.success) {
         setMyOrders(data.orders || []);
       } else {
@@ -69,7 +68,6 @@ const MyOrders = () => {
         <p className="text-center text-gray-500">No orders found.</p>
       ) : (
         myOrders.map((order, index) => {
-          console.log('Order being processed:', JSON.stringify(order, null, 2));
           return (
             <div
               key={order._id || index}
@@ -91,13 +89,6 @@ const MyOrders = () => {
               </div>
               {order.items && Array.isArray(order.items) ? (
                 order.items.map((item, itemIndex) => {
-                  console.log('Item data:', {
-                    id: item._id,
-                    name: item.product?.productName || item.name,
-                    size: item.size,
-                    color: item.color,
-                    quantity: item.quantity
-                  });
                   if (!item.product) {
                     console.warn('Item missing product data:', JSON.stringify(item, null, 2));
                     return (
@@ -135,7 +126,6 @@ const MyOrders = () => {
                       </div>
                     );
                   }
-                  console.log('Item product data:', JSON.stringify(item.product, null, 2));
                   if (!item.product.productImage || (Array.isArray(item.product.productImage) && item.product.productImage.length === 0)) {
                     console.warn('Missing or invalid productImage for item:', JSON.stringify(item.product, null, 2));
                   }
@@ -155,7 +145,7 @@ const MyOrders = () => {
                             className="md:w-20 w-16 object-cover"
                             src={
                               item.product.productImage && item.product.productImage.length > 0
-                                ? `http://localhost:4800${item.product.productImage[0]}`
+                                ? item.product.productImage[0]
                                 : '/placeholder.jpg'
                             }
                             alt={item.product.productName || item.name || 'Product Image'}
