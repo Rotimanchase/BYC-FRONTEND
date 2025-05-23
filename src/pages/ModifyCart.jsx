@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { FaMinus, FaPlus, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import ProductRatings from "../components/ProductRatings";
-import { useAppContext } from "../context/appContext";
 import toast from "react-hot-toast";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axiosInstance from "../../axios";
+import { useAppContext } from "../context/AppsContext";
 
 const Modifycart = ({ product: propProduct }) => {
   const { addToCart, fetchCart, cart, user, removeFromCart } = useAppContext();

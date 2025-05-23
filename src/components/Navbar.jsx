@@ -3,8 +3,9 @@ import { FiSearch, FiUser, FiHeart, FiShoppingCart } from 'react-icons/fi';
 import { assets } from '../assets/assets';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaChevronDown, FaSearch } from 'react-icons/fa';
-import { useAppContext } from '../context/appContext';
+// import { useAppContext } from '../context/appContext';
 import ProductNavigation from './ProductNavigation';
+import { useAppContext } from '../context/AppsContext';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);

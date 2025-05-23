@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { assets, currency } from "../assets/assets";
 import axiosInstance from "../../axios";
-import { useAppContext } from "../context/appContext";
 import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
+import { useAppContext } from "../context/AppsContext";
 
 const CheckOut = () => {
   const { cart, fetchCart, clearCart } = useAppContext();

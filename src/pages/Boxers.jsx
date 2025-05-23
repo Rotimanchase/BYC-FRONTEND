@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import ViewToggle from '../components/ViewToggle';
 import SortBtn from '../components/SortBtn';
 import { assets, currency } from '../assets/assets';
-import { useAppContext } from '../context/appContext';
 import axiosInstance from '../../axios';
 import toast from 'react-hot-toast';
+import { useAppContext } from '../context/AppsContext';
 
 const Boxers = () => {
   const [isHover, setIsHover] = useState(null);

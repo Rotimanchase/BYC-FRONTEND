@@ -1,7 +1,7 @@
 import React from "react";
 import { assets } from "../../assets/assets";
 import { NavLink, Outlet, useNavigate } from "react-router-dom"; 
-import { useAppContext } from "../../context/appContext";
+import { useAppContext } from "../../context/AppsContext";
 
 const AdminLayout = () => {
   const { logout } = useAppContext(); 

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { assets, currency } from '../assets/assets';
-import { useAppContext } from '../context/appContext';
 import toast from 'react-hot-toast';
+import { useAppContext } from '../context/AppsContext';
 
 const Wishlist = () => {
   const [isHover, setIsHover] = useState(null);

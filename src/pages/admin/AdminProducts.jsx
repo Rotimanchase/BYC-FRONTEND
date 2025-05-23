@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../../axios";
 import toast from "react-hot-toast";
-import { useAppContext } from "../../context/appContext";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../../context/AppsContext";
 
 const AdminProducts = () => {
   const { isAdmin } = useAppContext();

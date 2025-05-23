@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { assets, currency } from '../assets/assets';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import RecentlyView from '../components/RecentlyView';
-import { useAppContext } from '../context/appContext';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import { useAppContext } from '../context/AppsContext';
 
 const Cart = () => {
   const { cart, updateQuantity, removeFromCart, fetchCart } = useAppContext();

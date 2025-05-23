@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { FaStar, FaRegStar, FaStarHalfAlt } from 'react-icons/fa';
 import { FiChevronRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import { useAppContext } from '../context/appContext';
 import toast from 'react-hot-toast';
+import { useAppContext } from '../context/AppsContext';
 
 const RecentlyView = () => {
   const { recentlyViewed, fetchRecentlyViewed, clearRecentlyViewed, user } = useAppContext();

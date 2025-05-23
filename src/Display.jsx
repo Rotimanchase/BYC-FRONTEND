@@ -20,15 +20,14 @@ import MyOrders from './pages/MyOrders'
 import ProductDetail from './components/ProductDetails'
 import AdminLogin from './components/admin/AdminLogin'
 import AdminLayout from './pages/admin/AdminLayout'
-// import { useAppContext } from './context/appContext'
 import AddProduct from './pages/admin/AddProduct'
 import AddBlog from './pages/admin/AddBlog'
 import ProductList from './pages/admin/ProductList'
 import OrdersPage from './pages/admin/OrdersPage'
-import { useAppContext } from './context/appContext'
 import AdminProducts from './pages/admin/adminProducts'
 import Dashboard from './pages/admin/Dashboard'
 import PaymentSuccess from './pages/PaymentSuccess'
+import { useAppContext } from './context/AppsContext'
 
 
 const Display = () => {

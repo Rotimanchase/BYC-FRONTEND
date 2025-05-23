@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import toast from 'react-hot-toast';
-import { useAppContext } from '../../context/appContext';
 import axiosInstance from '../../../axios';
 import { assets } from '../../assets/assets'; // Import assets for placeholder icon
+import { useAppContext } from '../../context/AppsContext';
 
 const OrderPage = () => {
   const { currency } = useAppContext();

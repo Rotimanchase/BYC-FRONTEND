@@ -2,8 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../axios';
 import toast from 'react-hot-toast';
-import { useAppContext } from '../context/appContext';
 import { currency } from '../assets/assets';
+import { useAppContext } from '../context/AppsContext';
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();

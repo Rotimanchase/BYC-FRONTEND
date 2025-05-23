@@ -6,10 +6,10 @@ import ViewToggle from '../components/ViewToggle';
 import SortBtn from '../components/SortBtn';
 import RecentlyView from '../components/RecentlyView';
 import axiosInstance from '../../axios';
-import { useAppContext } from '../context/appContext';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { useAppContext } from '../context/AppsContext';
 
 const Products = () => {
   const [isHover, setIsHover] = useState(null);
