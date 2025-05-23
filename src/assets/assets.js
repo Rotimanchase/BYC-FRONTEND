@@ -1,11 +1,11 @@
 import byc from './byc-logo.png';
-import vector from './vector.png';
+import vector from './Vector.png';
 import heart from './heart-icon.png';
 import cart from './shopping-cart.png';
 import user from './user-profile.png';
-import pay from './payments.png';
-import phone from './vector (2).png';
-import mail from './mail.png';
+import pay from './Payments.png';
+import phone from './Vector (2).png';
+import mail from './Mail.png';
 import fb from './facebook.png';
 import insta from './instagra.png';
 import twi from './x.png';
@@ -28,9 +28,9 @@ import lastl from './lleft.png'
 import lastm from './lmid.png'
 import lastr from './lright.png'
 import lpic from './yellow.png'
-import eye from './views.png'
-import lasth from './likes.png'
-import larrow from './arrow.png'
+import eye from './Views.png'
+import lasth from './Likes.png'
+import larrow from './Arrow.png'
 import bfirst from './blogfirst.png'
 import bsecond from './blogsecond.png'
 import bfoot from './blogfoot.png'
