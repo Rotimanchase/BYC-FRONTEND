@@ -1,14 +1,16 @@
 import axios from 'axios';
 
-// Simple hardcoded approach that works with Vercel builds
-const API_BASE = process.env.NODE_ENV === 'production' 
-  ? 'https://byc-backend.vercel.app'
-  : 'http://localhost:4800';
+// Fix environment variable detection for Vite
+const API_BASE = import.meta.env.VITE_API_URL || 
+  (import.meta.env.MODE === 'production' 
+    ? 'https://byc-backend.vercel.app/'  // ⚠️ REPLACE with your actual backend URL
+    : 'http://localhost:4800'
+  );
 
 const axiosInstance = axios.create({
-  baseURL: API_BASE,
+  baseURL: API_BASE, // ✅ Fixed: was hardcoded to localhost
   withCredentials: true,
-  timeout: 30000,
+  timeout: 30000, // 30 seconds timeout for mobile networks
   headers: {
     'Content-Type': 'application/json',
   },
@@ -23,7 +25,7 @@ axiosInstance.interceptors.request.use(
 
     const adminToken = localStorage.getItem('adminToken');
     const adminRoutes = ['/api/admin', '/api/product/add', '/api/product/stock'];
-    if (adminToken && adminRoutes.some((route) => config.url?.includes(route))) {
+    if (adminToken && adminRoutes.some((route) => config.url.includes(route))) {
       config.headers['x-auth-token'] = adminToken;
     }
 
