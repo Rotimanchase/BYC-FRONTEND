@@ -243,7 +243,7 @@ const AddProduct = () => {
             Product Code
           </label>
           <input
-            onChange={(e) => setProductName(e.target.value)}
+            onChange={(e) => setProductNumber(e.target.value)}
             value={productNumber}
             id="product-number"
             type="text"
