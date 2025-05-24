@@ -1,36 +1,36 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
-import axiosInstance from '../../../axios';
-import { useAppContext } from '../../context/AppsContext';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import axiosInstance from "../../../axios";
+import { useAppContext } from "../../context/AppsContext";
 
 const AddProduct = () => {
   const { isAdmin } = useAppContext();
   const navigate = useNavigate();
 
-  const [imageUrls, setImageUrls] = useState(['']); // Array for multiple image URLs
-  const [productName, setProductName] = useState('');
-  const [productNumber, setProductNumber] = useState('');
-  const [category, setCategory] = useState('');
-  const [productPrice, setProductPrice] = useState('');
-  const [productStock, setProductStock] = useState('');
-  const [productDescription, setProductDescription] = useState('');
+  const [imageUrls, setImageUrls] = useState([""]);
+  const [productName, setProductName] = useState("");
+  const [productNumber, setProductNumber] = useState("");
+  const [category, setCategory] = useState("");
+  const [productPrice, setProductPrice] = useState("");
+  const [productStock, setProductStock] = useState("");
+  const [productDescription, setProductDescription] = useState("");
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
   const [stock, setStock] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const categories = [
-    { id: 'Men', name: 'Men' },
-    { id: 'Women', name: 'Women' },
-    { id: 'Children', name: 'Children' },
+    { id: "Men", name: "Men" },
+    { id: "Women", name: "Women" },
+    { id: "Children", name: "Children" },
   ];
 
-  const availableSizes = ['S', 'M', 'L', 'XL', 'XXL'];
-  const availableColors = ['Red', 'Blue', 'Green', 'Black', 'White', 'Yellow'];
+  const availableSizes = ["S", "M", "L", "XL", "XXL"];
+  const availableColors = ["Red", "Blue", "Green", "Black", "White", "Yellow"];
 
   if (!isAdmin) {
-    navigate('/admin/login');
+    navigate("/admin/login");
     return null;
   }
 
@@ -42,9 +42,9 @@ const AddProduct = () => {
 
   const addImageUrlField = () => {
     if (imageUrls.length < 4) {
-      setImageUrls([...imageUrls, '']);
+      setImageUrls([...imageUrls, ""]);
     } else {
-      toast.error('Maximum 4 images allowed');
+      toast.error("Maximum 4 images allowed");
     }
   };
 
@@ -69,7 +69,9 @@ const AddProduct = () => {
       const existing = prev.find((item) => item.size === size && item.color === color);
       if (existing) {
         return prev.map((item) =>
-          item.size === size && item.color === color ? { ...item, quantity: Number(quantity) } : item
+          item.size === size && item.color === color
+            ? { ...item, quantity: Number(quantity) }
+            : item
         );
       }
       return [...prev, { size, color, quantity: Number(quantity) }];
@@ -79,6 +81,7 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate required fields
     if (
       !productName ||
       !productNumber ||
@@ -89,28 +92,28 @@ const AddProduct = () => {
       imageUrls.length === 0 ||
       imageUrls.every((url) => !url.trim())
     ) {
-      toast.error('Please fill all required fields and provide at least one image URL');
+      toast.error("Please fill all required fields and provide at least one image URL");
       return;
     }
 
     if (productName.length < 3 || productName.length > 50) {
-      toast.error('Product name must be 3-50 characters');
+      toast.error("Product name must be 3-50 characters");
       return;
     }
     if (productNumber.length < 3 || productNumber.length > 50) {
-      toast.error('Product code must be 3-50 characters');
+      toast.error("Product code must be 3-50 characters");
       return;
     }
     if (productDescription.length < 10 || productDescription.length > 500) {
-      toast.error('Description must be 10-500 characters');
+      toast.error("Description must be 10-500 characters");
       return;
     }
     if (Number(productPrice) < 0) {
-      toast.error('Price must be non-negative');
+      toast.error("Price must be non-negative");
       return;
     }
     if (Number(productStock) < 1) {
-      toast.error('Stock must be at least 1');
+      toast.error("Stock must be at least 1");
       return;
     }
 
@@ -122,9 +125,13 @@ const AddProduct = () => {
 
     // Validate image URLs
     const validUrls = imageUrls.filter((url) => url.trim()).map((url) => url.trim());
+    if (validUrls.length === 0) {
+      toast.error("At least one valid image URL is required");
+      return;
+    }
     for (const url of validUrls) {
-      if (!url.startsWith('https://res.cloudinary.com/')) {
-        toast.error('Please provide valid Cloudinary image URLs');
+      if (!url.startsWith("https://res.cloudinary.com/")) {
+        toast.error(`Invalid Cloudinary URL: ${url}`);
         return;
       }
     }
@@ -134,8 +141,8 @@ const AddProduct = () => {
       productName,
       productNumber,
       category,
-      productPrice,
-      productStock,
+      productPrice: Number(productPrice),
+      productStock: Number(productStock),
       productDescription,
       sizes,
       colors,
@@ -143,30 +150,42 @@ const AddProduct = () => {
       productImage: validUrls,
     };
 
+    console.log("Submitting product data:", JSON.stringify(data, null, 2)); // Debug
+
     try {
-      const response = await axiosInstance.post('/api/product/add', data, {
+      const response = await axiosInstance.post("/api/product/add", data, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
+      console.log("Add product response:", response.data); // Debug
       if (response.data.success) {
-        toast.success('Product added successfully!');
-        setImageUrls(['']);
-        setProductName('');
-        setProductNumber('');
-        setCategory('');
-        setProductPrice('');
-        setProductStock('');
-        setProductDescription('');
+        toast.success("Product added successfully!");
+        setImageUrls([""]);
+        setProductName("");
+        setProductNumber("");
+        setCategory("");
+        setProductPrice("");
+        setProductStock("");
+        setProductDescription("");
         setSizes([]);
         setColors([]);
         setStock([]);
       } else {
-        toast.error(response.data.message || 'Failed to add product');
+        toast.error(response.data.message || "Failed to add product");
       }
     } catch (error) {
-      console.error('Error adding product:', error.response?.data || error.message);
-      toast.error(error.response?.data?.message || 'Error adding product');
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Error adding product. Check console for details.";
+      console.error("Error adding product:", {
+        message: errorMessage,
+        response: error.response?.data,
+        status: error.response?.status,
+        request: error.config,
+      });
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -199,11 +218,7 @@ const AddProduct = () => {
               </div>
             ))}
             {imageUrls.length < 4 && (
-              <button
-                type="button"
-                onClick={addImageUrlField}
-                className="text-blue-500"
-              >
+              <button type="button" onClick={addImageUrlField} className="text-blue-500">
                 Add Another URL
               </button>
             )}
@@ -228,7 +243,7 @@ const AddProduct = () => {
             Product Code
           </label>
           <input
-            onChange={(e) => setProductNumber(e.target.value)}
+            onChange={(e) => setProductName(e.target.value)}
             value={productNumber}
             id="product-number"
             type="text"
@@ -354,7 +369,8 @@ const AddProduct = () => {
                           type="number"
                           min="0"
                           value={
-                            stock.find((item) => item.size === size && item.color === color)?.quantity || 0
+                            stock.find((item) => item.size === size && item.color === color)
+                              ?.quantity || 0
                           }
                           onChange={(e) => handleStockChange(size, color, e.target.value)}
                           className="w-full p-1 border rounded"
