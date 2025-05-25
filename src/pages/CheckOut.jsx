@@ -6,8 +6,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAppContext } from "../context/AppsContext";
 
 const CheckOut = () => {
-  const { cart, fetchCart, clearCart } = useAppContext();
-  const user = JSON.parse(localStorage.getItem("user")) || null;
+  const { cart, fetchCart, clearCart, user } = useAppContext();
+  // const user = JSON.parse(localStorage.getItem("user")) || null;
   const userId = user?._id;
   const [formData, setFormData] = useState({
     fullname: "",
