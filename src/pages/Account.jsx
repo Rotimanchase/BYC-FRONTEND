@@ -9,23 +9,44 @@ const Account = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
-  const { fetchCart } = useAppContext();
+  const { fetchCart, loginUser } = useAppContext();
   const navigate = useNavigate();
+
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+
+  //   try {
+  //     const api = isSignUp ? '/api/user/register' : '/api/user/login';
+  //     const payload = isSignUp ? { name, email, password } : { email, password };
+
+  //     const { data } = await axiosInstance.post(api, payload);
+
+  //     if (data.success) {
+  //       await loginUser(responseToken);
+  //       toast.success(isSignUp ? 'Account created!' : 'Logged in successfully');
+  //       await fetchCart(); // Fetch cart after login/signup
+  //       navigate('/');
+  //     } else {
+  //       toast.error(data.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.response?.data?.message || error.message);
+  //   }
+  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     try {
       const api = isSignUp ? '/api/user/register' : '/api/user/login';
       const payload = isSignUp ? { name, email, password } : { email, password };
-
+  
       const { data } = await axiosInstance.post(api, payload);
-
+  
       if (data.success) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user)); // Store user data
+        // Use data.token (not responseToken)
+        await loginUser(data.token);
         toast.success(isSignUp ? 'Account created!' : 'Logged in successfully');
-        await fetchCart(); // Fetch cart after login/signup
         navigate('/');
       } else {
         toast.error(data.message);

@@ -382,8 +382,7 @@ export const AppsProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     if (token) {
       setAuthToken(token);
-      axiosInstance
-        .get('/api/user/me')
+      axiosInstance.get('/api/user/me')
         .then((response) => {
           if (response.data.success) {
             setUser(response.data.user);
@@ -406,6 +405,26 @@ export const AppsProvider = ({ children }) => {
       setWishlist([]);
       setCart([]);
       setRecentlyViewed([]);
+    }
+  }, []);
+
+  const loginUser = useCallback(async (token) => {
+    try {
+      localStorage.setItem('token', token);
+      setAuthToken(token);
+      
+      const response = await axiosInstance.get('/api/user/me');
+      if (response.data.success) {
+        setUser(response.data.user);
+        return response.data.user;
+      } else {
+        throw new Error('Failed to fetch user data');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      localStorage.removeItem('token');
+      setUser(null);
+      throw error;
     }
   }, []);
 
@@ -442,6 +461,7 @@ export const AppsProvider = ({ children }) => {
         clearRecentlyViewed,
         fetchRecentlyViewed,
         refreshProducts,
+        loginUser,
       }}
     >
       {children}

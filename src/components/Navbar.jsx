@@ -307,8 +307,7 @@ export default function Navbar() {
               strokeWidth={2}
               viewBox="0 0 24 24"
               strokeLinecap="round"
-              strokeLinejoin="round"
-            >
+              strokeLinejoin="round">
               {isOpen ? (
                 <path d="M6 18L18 6M6 6l12 12" />
               ) : (
