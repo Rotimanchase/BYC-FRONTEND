@@ -218,16 +218,16 @@ const Products = () => {
                           ? 'flex-col md:flex-row mt-1'
                           : 'flex-row'} md:gap-4 gap-2 w-full z-10`}>
                         <button
-                          className='flex items-center justify-center gap-2 border border-red-500 md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-50 transition-colors cursor-pointer'
+                          className='flex items-center justify-center md:gap-3 gap-1 border border-red-500 md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-50 transition-colors cursor-pointer'
                           onClick={() => handleAddToWishlist(category)}>
-                          <img src={assets.wishlove} alt='Add to Wishlist' className='md:h-4 md:w-4 hidden md:block' />
-                          <span className='text-red-600 font-semibold text-xs md:text-sm'>Wishlist</span>
+                          <img src={assets.wishlove} alt='Add to Wishlist' className='md:h-4 md:w-4 h-2' />
+                          <span className='text-red-600 text-xs md:text-sm'>Wishlist</span>
                         </button>
-                        <Link className='flex items-center justify-center gap-2 bg-red-600 text-white md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-700 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+                        <Link className='flex items-center justify-center md:gap-3 gap-1 bg-red-600 text-white md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-700 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
                           to={`/product/${category._id}`}
                           disabled={category.productStock <= 0}>
-                          <img src={assets.wishcart} alt='Add to Cart' className='h-4 w-4 hidden md:block' />
-                          <span className='font-semibold text-xs md:text-sm'>
+                          <img src={assets.wishcart} alt='Add to Cart' className='md:h-4 md:w-4 h-2'/>
+                          <span className=' text-xs md:text-sm'>
                             {category.productStock <= 0 ? 'Out of Stock' : 'Buy Now'}
                           </span>
                         </Link>
