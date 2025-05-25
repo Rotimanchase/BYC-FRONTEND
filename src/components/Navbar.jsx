@@ -151,7 +151,7 @@ export default function Navbar() {
               <img src={assets.byc} alt="Logo" className="h-11 w-18" />
             </Link>
           ) : (
-            <div className={`flex items-center border-b pb-1 w-[40%] ${isDarkBg ? 'border-white' : 'border-gray-500'}`}>
+            <div className={`flex items-center border-b pb-1 w-full ${isDarkBg ? 'border-white' : 'border-gray-500'}`}>
               <input
                 onChange={(e) => setSearchQuery(e.target.value)}
                 type="text"
