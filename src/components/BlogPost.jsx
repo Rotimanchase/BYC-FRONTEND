@@ -108,11 +108,11 @@ const BlogPost = ({ showAll = false, enableMobilePagination = false }) => {
           {/* Mobile: Show one blog card */}
           <div className="md:hidden flex justify-center">
             {paginatedBlogs.map((blog) => (
-              <div key={blog._id} className="shadow-xl w-full mx-5 mb-5">
+              <div key={blog._id} className="shadow-xl w-80 mx-5 mb-5">
                 <Link to={`/blogs/${blog._id}`} className="block">
                   <img className="w-full h-70" src={blog.blogImage} alt={blog.blogTitle} />
                 </Link>
-                <div className="flex items-center gap-8 bg-[#E0E0E0] w-75 ml-5 mt-4 mb-4 p-2">
+                <div className="flex items-center gap-8 bg-[#E0E0E0] w-70 ml-5 mt-4 mb-4 p-2">
                   <img
                     src={blog.authorImage}
                     alt="author"
