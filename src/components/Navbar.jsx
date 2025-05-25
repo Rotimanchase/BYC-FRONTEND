@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FiSearch, FiUser, FiHeart, FiShoppingCart } from 'react-icons/fi';
 import { assets } from '../assets/assets';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FaChevronDown, FaSearch } from 'react-icons/fa';
-// import { useAppContext } from '../context/appContext';
+import { FaSearch } from 'react-icons/fa';
 import ProductNavigation from './ProductNavigation';
 import { useAppContext } from '../context/AppsContext';
 
@@ -14,6 +13,7 @@ export default function Navbar() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userDropdownRef = useRef(null);
   const shopDropdownRef = useRef(null);
+  const mobileMenuRef = useRef(null); // New ref for mobile menu
   const { cart, searchQuery, setSearchQuery } = useAppContext();
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,6 +21,12 @@ export default function Navbar() {
   const darkBgPage = ['/wishlist'];
   const isDarkBg = darkBgPage.includes(path);
   const [user, setUser] = useState(null);
+
+  // Helper function to get first name
+  const getFirstName = (fullName) => {
+    if (!fullName) return 'User';
+    return fullName.split(' ')[0];
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -36,9 +42,11 @@ export default function Navbar() {
     const handleClickOutside = (event) => {
       const isOutsideUser = userDropdownRef.current && !userDropdownRef.current.contains(event.target);
       const isOutsideShop = shopDropdownRef.current && !shopDropdownRef.current.contains(event.target);
-      if (isOutsideUser && isOutsideShop) {
+      const isOutsideMobileMenu = mobileMenuRef.current && !mobileMenuRef.current.contains(event.target);
+      if (isOutsideUser && isOutsideShop && isOutsideMobileMenu) {
         setShowUserMenu(false);
         setShowShopDropdown(false);
+        setIsOpen(false); // Close hamburger menu
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -48,15 +56,14 @@ export default function Navbar() {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
-        setIsOpen(false); // Reset isOpen on desktop
+        setIsOpen(false);
       }
     };
     window.addEventListener('resize', handleResize);
-    handleResize(); // Initial check
+    handleResize();
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // const toggleSearch = () => setShowSearch(!showSearch);
   const toggleSearch = () => {
     if (showSearch) {
       setSearchQuery('');
@@ -78,36 +85,36 @@ export default function Navbar() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setUser(null);
+    setShowUserMenu(false); // Close user dropdown
+    setIsOpen(false); // Close hamburger menu
     navigate('/account');
   };
 
-  
   useEffect(() => {
     const delay = setTimeout(() => {
       if (searchQuery.length > 0 && location.pathname !== '/product') {
         navigate('/product');
       }
     }, 300);
-  
+
     return () => clearTimeout(delay);
-  }, [searchQuery, location.pathname]);
-  
+  }, [searchQuery, location.pathname, navigate]);
+
   useEffect(() => {
     if (location.pathname !== '/product' && searchQuery) {
       setSearchQuery('');
     }
-  }, [location.pathname]);
-  
+  }, [location.pathname, setSearchQuery]);
+
   return (
-    <nav className={`${isDarkBg ? 'bg-black text-white' : 'bg-white'} relative `}>
-      <div className="flex items-center justify-center h-30 md:mx-8">
-        {/* Left section */}
-        <div className="absolute z-10 left-4 space-x-6 md:flex hidden ml-5">
-          <button onClick={toggleShopDropdown}
-            className={`${isDarkBg ? '' : 'text-gray-700 hover:text-black'} cursor-pointer`}>
+    <nav className={`${isDarkBg ? 'bg-black text-white' : 'bg-white'} relative`}>
+      <div className="flex items-center justify-between h-16 md:h-20 px-4 md:px-8">
+        {/* Desktop Left section */}
+        <div className="hidden md:flex space-x-6">
+          <button onClick={toggleShopDropdown} className={`${isDarkBg ? '' : 'text-gray-700 hover:text-black'} cursor-pointer`} >
             Shop Products
           </button>
-          <Link to="/Blogs" className={`${isDarkBg ? '' : 'text-gray-700 hover:text-black'}`}>
+          <Link to="/blogs" className={`${isDarkBg ? '' : 'text-gray-700 hover:text-black'}`}>
             Blog
           </Link>
           <a href="#" className={`${isDarkBg ? '' : 'text-gray-700 hover:text-black'}`}>
@@ -115,45 +122,73 @@ export default function Navbar() {
           </a>
         </div>
 
-        {/* Center Logo */}
-        {!showSearch ? (
-          <div className="flex md:justify-center justify-left cursor-pointer md:ml-0 ml-5 w-full md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
+        {/* Mobile Left - Logo & Search */}
+        <div className="md:hidden flex items-center flex-grow">
+          {!showSearch ? (
+            <Link to="/" className="text-xl font-bold">
+              <img src={assets.byc} alt="Logo" className="h-8 w-14" />
+            </Link>
+          ) : (
+            <div className={`flex items-center border-b pb-1 w-full max-w-[220px] ${isDarkBg ? 'border-white' : 'border-gray-500'}`}>
+              <input
+                onChange={(e) => setSearchQuery(e.target.value)}
+                type="text"
+                placeholder="Search Product"
+                className="bg-transparent border-none w-full focus:outline-none"
+                autoFocus
+              />
+              <button onClick={toggleSearch} className="p-0 ml-2">
+                <FaSearch />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Center - Logo or Search */}
+        <div className="hidden md:flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">
+          {!showSearch ? (
             <Link to="/" className="text-xl font-bold">
               <img src={assets.byc} alt="Logo" className="h-11 w-18" />
             </Link>
-          </div>
-        ) : (
-          <div className={`flex items-center border-b pb-1 w-[40%] ${
-              isDarkBg ? 'border-white' : 'border-gray-500' }`} >
-            <input onChange={(e) => setSearchQuery(e.target.value)}
-              type="text"
-              placeholder="Search Product"
-              className="bg-transparent border-none w-full focus:outline-none"/>
-            <button onClick={() => setShowSearch(false)} className="p-0 ml-2">
-              <FaSearch />
-            </button>
-          </div>
-        )}
+          ) : (
+            <div className={`flex items-center border-b pb-1 w-[40%] ${isDarkBg ? 'border-white' : 'border-gray-500'}`}>
+              <input
+                onChange={(e) => setSearchQuery(e.target.value)}
+                type="text"
+                placeholder="Search Product"
+                className="bg-transparent border-none w-full focus:outline-none"
+                autoFocus
+              />
+              <button onClick={toggleSearch} className="p-0 ml-2">
+                <FaSearch />
+              </button>
+            </div>
+          )}
+        </div>
 
-        {/* Right section */}
-        <div className="absolute right-4 md:flex hidden items-center space-x-6 text-gray-700 mr-5">
+        {/* Desktop Right section */}
+        <div className="hidden md:flex items-center space-x-6 text-gray-700">
           <Link
             to="/about"
-            className={`${isDarkBg ? 'text-white' : 'text-gray-700 hover:text-black'}`} >
+            className={`${isDarkBg ? 'text-white' : 'text-gray-700 hover:text-black'}`}
+          >
             About Us
           </Link>
           <Link
             to="/contact"
-            className={`${isDarkBg ? 'text-white' : 'text-gray-700 hover:text-black'}`}>
+            className={`${isDarkBg ? 'text-white' : 'text-gray-700 hover:text-black'}`}
+          >
             Contact
           </Link>
-          {!showSearch && (
-            <button onClick={toggleSearch}>
-              <FiSearch
-                className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
-              />
-            </button>
-          )}
+          
+          <button
+            onClick={toggleSearch}
+            className={`ml-2 ${showSearch ? 'hidden' : 'block'}`}
+          >
+            <FiSearch
+              className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
+            />
+          </button>
 
           {user ? (
             <div className="relative" ref={userDropdownRef}>
@@ -161,23 +196,29 @@ export default function Navbar() {
                 className={`flex items-center gap-2 cursor-pointer ${
                   isDarkBg ? 'text-white' : 'hover:text-black'
                 }`}
-                onClick={toggleUserMenu}>
+                onClick={toggleUserMenu}
+              >
                 <FiUser className="w-5 h-5" />
                 <span className="text-sm font-medium">
-                  Hi {user.name || user.username || 'User'}
+                  Hi {getFirstName(user.name || user.username)}!
                 </span>
               </div>
 
               {showUserMenu && (
-                <div className="absolute top-6 right-0 bg-white text-black shadow-lg p-2 text-sm rounded-md z-100">
+                <div className="absolute top-8 right-0 bg-white text-black shadow-lg p-2 text-sm min-w-30 rounded-md z-50">
                   <button
-                    onClick={() => navigate('/my-orders')}
-                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left" >
+                    onClick={() => {
+                      navigate('/my-orders');
+                      setShowUserMenu(false);
+                    }}
+                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
+                  >
                     My Orders
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left">
+                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
+                  >
                     Logout
                   </button>
                 </div>
@@ -191,12 +232,13 @@ export default function Navbar() {
             </button>
           )}
 
-          <Link to="wishlist">
+          <Link to="/wishlist" className="relative">
             <FiHeart
               className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
             />
           </Link>
-          <Link to="cart" className="relative">
+          
+          <Link to="/cart" className="relative">
             <FiShoppingCart
               className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
             />
@@ -208,8 +250,59 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Mobile Hamburger */}
-        <div className="md:hidden absolute right-4 flex items-center">
+        {/* Mobile Right section */}
+        <div className="md:hidden flex items-center gap-3">
+          <button
+            onClick={toggleSearch}
+            className={`ml-2 ${showSearch ? 'hidden' : 'block'}`}
+          >
+            <FiSearch className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`} />
+          </button>
+
+          {user ? (
+            <div className="relative" ref={userDropdownRef}>
+              <div
+                className={`flex items-center gap-1 cursor-pointer ${
+                  isDarkBg ? 'text-white' : 'hover:text-black'
+                }`}
+                onClick={toggleUserMenu}
+              >
+                <FiUser className="w-5 h-5" />
+                <span className="text-xs font-medium">
+                  Hi {getFirstName(user.name || user.username)}
+                </span>
+              </div>
+
+              {showUserMenu && (
+                <div className="absolute top-8 right-0 bg-white text-black shadow-lg p-2 text-sm rounded-md z-50 min-w-32">
+                  <button
+                    onClick={() => {
+                      navigate('/my-orders');
+                      setShowUserMenu(false);
+                      setIsOpen(false); // Close hamburger menu
+                    }}
+                    className="block px-4 py-2 hover:bg-gray-100 w-full text-center"
+                  >
+                    My Orders
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="block px-4 py-2 hover:bg-gray-100 w-full text-center"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button onClick={() => {
+              navigate('/account');
+              setIsOpen(false); // Close hamburger menu
+            }}>
+              <FiUser className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`} />
+            </button>
+          )}
+
           <button
             onClick={() => setIsOpen(!isOpen)}
             className={`focus:outline-none ${isDarkBg ? 'text-white' : 'text-gray-700'}`}
@@ -235,71 +328,65 @@ export default function Navbar() {
 
       {/* Shop Products Dropdown (Desktop) */}
       {showShopDropdown && (
-        <div ref={shopDropdownRef} className="hidden md:block absolute top-full left-0 w-full bg-white z-100 shadow-lg">
+        <div ref={shopDropdownRef} className="hidden md:block absolute top-full left-0 w-full bg-white z-50 shadow-lg">
           <ProductNavigation compact={false} />
         </div>
       )}
 
       {/* Mobile Dropdown */}
       {isOpen && (
-        <div className="md:hidden px-4 pb-4 space-y-2 text-gray-700">
-          <button onClick={toggleShopDropdown} className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`} >
+        <div ref={mobileMenuRef} className="md:hidden px-4 pb-4 space-y-2 text-gray-700 bg-white border-t z-50">
+          <button
+            onClick={() => {
+              toggleShopDropdown();
+              setIsOpen(false); // Close hamburger menu
+            }}
+            className={`block ${isDarkBg ? 'text-black' : 'hover:text-black'} py-2`}
+          >
             Shop Products
           </button>
+          
           {showShopDropdown && (
-            <div ref={shopDropdownRef} className="bg-white text-black p-4">
+            <div ref={shopDropdownRef} className="bg-gray-50 text-black p-4 rounded">
               <ProductNavigation compact={true} />
             </div>
           )}
+          
           <Link
-            to="blogs"
-            className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`}>
+            to="/blogs"
+            className={`block ${isDarkBg ? 'text-black' : 'hover:text-black'} py-2`}
+            onClick={() => setIsOpen(false)} // Close hamburger menu
+          >
             Blog
           </Link>
-          <a href="#" className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`}>
+          
+          <a
+            href="#"
+            className={`block ${isDarkBg ? 'text-black' : 'hover:text-black'} py-2`}
+            onClick={() => setIsOpen(false)} // Close hamburger menu
+          >
             FAQ
           </a>
-          <Link to="about" className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`}>
+          
+          <Link
+            to="/about"
+            className={`block ${isDarkBg ? 'text-black' : 'hover:text-black'} py-2`}
+            onClick={() => setIsOpen(false)} // Close hamburger menu
+          >
             About Us
           </Link>
-          <Link to="contact" className={`block ${isDarkBg ? 'text-white' : 'hover:text-black'}`} >
+          
+          <Link to="/contact" className={`block ${isDarkBg ? 'text-black' : 'hover:text-black'} py-2`} onClick={() => setIsOpen(false)} >
             Contact
           </Link>
-          <div className="flex space-x-4 pt-2">
-            <button onClick={toggleSearch}>
-              <FiSearch className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`} />
-            </button>
-            {user ? (
-              <div className="relative" ref={userDropdownRef}>
-                <div className={`flex items-center gap-2 cursor-pointer ${ isDarkBg ? 'text-white' : 'hover:text-black'
-                  }`} onClick={toggleUserMenu} >
-                  <FiUser className="w-5 h-5" />
-                  <span className="text-sm font-medium">
-                    Hi {user.name || user.username || 'User'}
-                  </span>
-                </div>
-
-                {showUserMenu && (
-                  <div className="absolute top-6 right-0 bg-white text-black shadow-lg p-2 text-sm rounded-md z-100">
-                    <button onClick={() => navigate('/my-orders')} className="block px-4 py-2 hover:bg-gray-100 w-full text-left">
-                      My Orders
-                    </button>
-                    <button onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100 w-full text-left" >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <button onClick={() => navigate('/account')}>
-                <FiUser className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}/>
-              </button>
-            )}
-            <Link to="wishlist">
-              <FiHeart className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`} />
+          
+          <div className="space-x-4 pt-2">
+            <Link to="/wishlist" className="" onClick={() => setIsOpen(false)} >
+              <FiHeart className="w-5 h-5 text-gray-700 hover:text-black" />
             </Link>
-            <Link to="cart" className="relative">
-              <FiShoppingCart className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}/>
+            
+            <Link to="/cart" className="relative " onClick={() => setIsOpen(false)} >
+              <FiShoppingCart className="w-5 h-5 text-gray-700 hover:text-black" />
               {Array.isArray(cart) && cart.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
                   {cart.reduce((total, item) => total + item.quantity, 0)}
