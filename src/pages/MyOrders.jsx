@@ -3,14 +3,16 @@ import axiosInstance from '../../axios';
 import { currency } from '../assets/assets';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useAppContext } from '../context/AppsContext';
 
 const MyOrders = () => {
   const [myOrders, setMyOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { user } = useAppContext();
 
-  const user = JSON.parse(localStorage.getItem('user')) || null;
+  // const user = JSON.parse(localStorage.getItem('user')) || null;
 
   const fetchMyOrders = async () => {
     if (!user || !user._id) {
@@ -19,6 +21,7 @@ const MyOrders = () => {
       navigate('/account');
       return;
     }
+
 
     try {
       const { data } = await axiosInstance.get('/api/order/user');
@@ -40,6 +43,13 @@ const MyOrders = () => {
   useEffect(() => {
     fetchMyOrders();
   }, []);
+
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate('/account');
+  //   }
+  // }, [user, navigate]);
+
 
   // Format address as a single line
   const formatAddress = (address) => {

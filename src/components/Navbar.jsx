@@ -14,13 +14,13 @@ export default function Navbar() {
   const userDropdownRef = useRef(null);
   const shopDropdownRef = useRef(null);
   const mobileMenuRef = useRef(null); // New ref for mobile menu
-  const { cart, searchQuery, setSearchQuery } = useAppContext();
+  const { cart, searchQuery, setSearchQuery, user, logout } = useAppContext();
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
   const darkBgPage = ['/wishlist'];
   const isDarkBg = darkBgPage.includes(path);
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
 
   // Helper function to get first name
   const getFirstName = (fullName) => {
@@ -28,15 +28,16 @@ export default function Navbar() {
     return fullName.split(' ')[0];
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
-    if (token && userData) {
-      setUser(JSON.parse(userData));
-    } else {
-      setUser(null);
-    }
-  }, [location]);
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   const userData = localStorage.getItem('user');
+  //   if (token && userData) {
+  //     setUser(JSON.parse(userData));
+  //   } else {
+  //     setUser(null);
+  //   }
+  // }, [location]);
+  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -82,11 +83,10 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
-    setShowUserMenu(false); // Close user dropdown
-    setIsOpen(false); // Close hamburger menu
+    // Use the logout function from context instead of manual cleanup
+    logout();
+    setShowUserMenu(false);
+    setIsOpen(false);
     navigate('/account');
   };
 
@@ -129,7 +129,7 @@ export default function Navbar() {
               <img src={assets.byc} alt="Logo" className="h-8 w-14" />
             </Link>
           ) : (
-            <div className={`flex items-center border-b pb-1 w-full max-w-[220px] ${isDarkBg ? 'border-white' : 'border-gray-500'}`}>
+            <div className={`flex items-center border-b pb-1 w-full max-w-[200px] ${isDarkBg ? 'border-white' : 'border-gray-500'}`}>
               <input
                 onChange={(e) => setSearchQuery(e.target.value)}
                 type="text"
@@ -192,33 +192,20 @@ export default function Navbar() {
 
           {user ? (
             <div className="relative" ref={userDropdownRef}>
-              <div
-                className={`flex items-center gap-2 cursor-pointer ${
-                  isDarkBg ? 'text-white' : 'hover:text-black'
-                }`}
-                onClick={toggleUserMenu}
-              >
+              <div className={`flex items-center gap-2 cursor-pointer ${ isDarkBg ? 'text-white' : 'hover:text-black' }`} onClick={toggleUserMenu}>
                 <FiUser className="w-5 h-5" />
                 <span className="text-sm font-medium">
-                  Hi {getFirstName(user.name || user.username)}!
+                  Hi {getFirstName(user.name)}!
                 </span>
               </div>
 
               {showUserMenu && (
                 <div className="absolute top-8 right-0 bg-white text-black shadow-lg p-2 text-sm min-w-30 rounded-md z-50">
-                  <button
-                    onClick={() => {
-                      navigate('/my-orders');
-                      setShowUserMenu(false);
-                    }}
-                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
-                  >
+                  <button onClick={() => { navigate('/my-orders'); setShowUserMenu(false) }} className="block px-4 py-2 hover:bg-gray-100 w-full text-left" >
                     My Orders
                   </button>
-                  <button
-                    onClick={handleLogout}
-                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
-                  >
+
+                  <button onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100 w-full text-left" >
                     Logout
                   </button>
                 </div>
@@ -227,8 +214,7 @@ export default function Navbar() {
           ) : (
             <button onClick={() => navigate('/account')}>
               <FiUser
-                className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
-              />
+                className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}/>
             </button>
           )}
 
@@ -255,6 +241,15 @@ export default function Navbar() {
           <button onClick={toggleSearch} className={`ml-2 ${showSearch ? 'hidden' : 'block'}`}>
             <FiSearch className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`} />
           </button>
+
+          <Link to="/cart" className="relative " onClick={() => setIsOpen(false)} >
+              <FiShoppingCart className="w-5 h-5 text-gray-700 hover:text-black" />
+              {Array.isArray(cart) && cart.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
+                  {cart.reduce((total, item) => total + item.quantity, 0)}
+                </span>
+              )}
+            </Link>
 
           {user ? (
             <div className="relative" ref={userDropdownRef}>
@@ -371,14 +366,7 @@ export default function Navbar() {
               <FiHeart className="w-5 h-5 text-gray-700 hover:text-black" />
             </Link>
             
-            <Link to="/cart" className="relative " onClick={() => setIsOpen(false)} >
-              <FiShoppingCart className="w-5 h-5 text-gray-700 hover:text-black" />
-              {Array.isArray(cart) && cart.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
-                  {cart.reduce((total, item) => total + item.quantity, 0)}
-                </span>
-              )}
-            </Link>
+            
           </div>
         </div>
       )}
