@@ -252,21 +252,14 @@ export default function Navbar() {
 
         {/* Mobile Right section */}
         <div className="md:hidden flex items-center gap-3">
-          <button
-            onClick={toggleSearch}
-            className={`ml-2 ${showSearch ? 'hidden' : 'block'}`}
-          >
+          <button onClick={toggleSearch} className={`ml-2 ${showSearch ? 'hidden' : 'block'}`}>
             <FiSearch className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`} />
           </button>
 
           {user ? (
             <div className="relative" ref={userDropdownRef}>
-              <div
-                className={`flex items-center gap-1 cursor-pointer ${
-                  isDarkBg ? 'text-white' : 'hover:text-black'
-                }`}
-                onClick={toggleUserMenu}
-              >
+              <div className={`flex items-center gap-1 cursor-pointer ${ isDarkBg ? 'text-white' : 'hover:text-black' }`}
+                onClick={toggleUserMenu} >
                 <FiUser className="w-5 h-5" />
                 <span className="text-xs font-medium">
                   Hi {getFirstName(user.name || user.username)}
@@ -336,13 +329,7 @@ export default function Navbar() {
       {/* Mobile Dropdown */}
       {isOpen && (
         <div ref={mobileMenuRef} className="md:hidden px-4 pb-4 space-y-2 text-gray-700 bg-white border-t z-50">
-          <button
-            onClick={() => {
-              toggleShopDropdown();
-              setIsOpen(false); // Close hamburger menu
-            }}
-            className={`block ${isDarkBg ? 'text-black' : 'hover:text-black'} py-2`}
-          >
+          <button onClick={() => { toggleShopDropdown(); }} className={`block ${isDarkBg ? 'text-black' : 'hover:text-black'} py-2`} >
             Shop Products
           </button>
           

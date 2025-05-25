@@ -223,16 +223,14 @@ const Products = () => {
                           <img src={assets.wishlove} alt='Add to Wishlist' className='md:h-4 md:w-4 hidden md:block' />
                           <span className='text-red-600 font-semibold text-xs md:text-sm'>Wishlist</span>
                         </button>
-                        <button
-                          className='flex items-center justify-center gap-2 bg-red-600 text-white md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-700 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
-                          onClick={() => handleAddToCart(category)}
-                          disabled={category.productStock <= 0}
-                        >
+                        <Link className='flex items-center justify-center gap-2 bg-red-600 text-white md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-700 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+                          to={`/product/${category._id}`}
+                          disabled={category.productStock <= 0}>
                           <img src={assets.wishcart} alt='Add to Cart' className='h-4 w-4 hidden md:block' />
                           <span className='font-semibold text-xs md:text-sm'>
                             {category.productStock <= 0 ? 'Out of Stock' : 'Buy Now'}
                           </span>
-                        </button>
+                        </Link>
                       </div>
                       <div className={`${
                         activeView === 'list' ? 'min-h-24 md:min-h-16' : 'min-h-14'
