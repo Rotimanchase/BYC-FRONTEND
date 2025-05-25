@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import Pargination from '../components/Pargination';
 
-const BlogPost = ({ showAll = false }) => {
+const BlogPost = ({ showAll = false, enableMobilePagination = false }) => {
   const [blogs, setBlogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const isMobile = window.innerWidth < 768; // Detect mobile screens
@@ -30,7 +30,9 @@ const BlogPost = ({ showAll = false }) => {
   // Pagination logic
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-  const paginatedBlogs = showAll ? blogs.slice(0, 3) : blogs.slice(indexOfFirstBlog, indexOfLastBlog);
+  const paginatedBlogs = showAll && !enableMobilePagination && !isMobile
+    ? blogs.slice(0, 3)
+    : blogs.slice(indexOfFirstBlog, indexOfLastBlog);
 
   // Track views once per session
   useEffect(() => {
@@ -104,13 +106,13 @@ const BlogPost = ({ showAll = false }) => {
       {paginatedBlogs.length > 0 ? (
         <>
           {/* Mobile: Show one blog card */}
-          <div className="md:hidden  flex justify-center">
+          <div className="md:hidden flex justify-center">
             {paginatedBlogs.map((blog) => (
-              <div key={blog._id} className="shadow-xl w-80 mx-5 mb-5">
+              <div key={blog._id} className="shadow-xl w-full mx-5 mb-5">
                 <Link to={`/blogs/${blog._id}`} className="block">
-                  <img className="w-full h-65" src={blog.blogImage} alt={blog.blogTitle} />
+                  <img className="w-full h-70" src={blog.blogImage} alt={blog.blogTitle} />
                 </Link>
-                <div className="flex items-center gap-8 bg-[#E0E0E0] w-65 ml-5 mt-4 mb-4 p-2">
+                <div className="flex items-center gap-8 bg-[#E0E0E0] w-75 ml-5 mt-4 mb-4 p-2">
                   <img
                     src={blog.authorImage}
                     alt="author"
@@ -205,6 +207,13 @@ const BlogPost = ({ showAll = false }) => {
         <p className="text-center col-span-full">No blogs available</p>
       )}
 
+      {/* Pagination — Show on Home or when enableMobilePagination is true on mobile */}
+      {(!showAll || (enableMobilePagination && isMobile)) && (
+        <div className="mt-10">
+          <Pargination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
+        </div>
+      )}
+
       {/* View All button — Only show on Home */}
       {!showAll && (
         <div className="flex justify-center mt-15 md:mt-20">
@@ -214,13 +223,6 @@ const BlogPost = ({ showAll = false }) => {
           >
             View All
           </Link>
-        </div>
-      )}
-
-      {/* Pagination — Only on Home */}
-      {!showAll && (
-        <div className="mt-10">
-          <Pargination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       )}
     </div>

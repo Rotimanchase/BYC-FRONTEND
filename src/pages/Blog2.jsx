@@ -78,7 +78,7 @@ const Blog2 = () => {
         </div>
       </div>
 
-      <BlogPost showAll={true} />
+      <BlogPost showAll={true} enableMobilePagination={true} />
     </>
   );
 };
