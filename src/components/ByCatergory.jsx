@@ -56,6 +56,15 @@ const ByCatergory = () => {
     fetchProducts();
   }, [active, activeProductType]);
 
+  // Reset product type when category changes
+  useEffect(() => {
+    if (active === 'women') {
+      setActiveProductType('CAMISOLE');
+    } else {
+      setActiveProductType('T-SHIRT');
+    }
+  }, [active]);
+
   // Group products dynamically for carousel
   const groupedProducts = [];
   for (let i = 0; i < products.length; i += itemsPerSlide) {
@@ -80,12 +89,27 @@ const ByCatergory = () => {
     { label: 'For Kids', value: 'kids' },
   ];
 
-  const productTypes = [
-    { label: 'T-shirt', value: 'T-SHIRT' },
-    { label: 'Singlet', value: 'SINGLET' },
-    { label: 'Pants', value: 'PANTS' },
-    { label: 'Boxers', value: 'BOXERS' },
-  ];
+  // Dynamic product types based on selected category
+  const getProductTypes = () => {
+    if (active === 'women') {
+      return [
+        { label: 'Camisole', value: 'CAMISOLE' },
+        { label: 'Singlet', value: 'SINGLET' },
+        { label: 'Pants', value: 'PANTS' },
+        { label: 'Boxers', value: 'BOXERS' },
+      ];
+    } else {
+      // Default for men and kids
+      return [
+        { label: 'T-shirt', value: 'T-SHIRT' },
+        { label: 'Singlet', value: 'SINGLET' },
+        { label: 'Pants', value: 'PANTS' },
+        { label: 'Boxers', value: 'BOXERS' },
+      ];
+    }
+  };
+
+  const productTypes = getProductTypes();
 
   return (
     <>
