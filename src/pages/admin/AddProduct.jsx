@@ -27,7 +27,7 @@ const AddProduct = () => {
   ];
 
   const availableSizes = ["S", "M", "L", "XL", "XXL"];
-  const availableColors = ["Red", "Blue", "Green", "Black", "White", "Yellow"];
+  const availableColors = ["Red", "Blue", "Green", "Black", "White", "Yellow", "Pink", "Purple", "Orange", "Grey", "Brown", ];
 
   if (!isAdmin) {
     navigate("/admin/login");
@@ -82,16 +82,7 @@ const AddProduct = () => {
     e.preventDefault();
 
     // Validate required fields
-    if (
-      !productName ||
-      !productNumber ||
-      !category ||
-      !productPrice ||
-      !productStock ||
-      !productDescription ||
-      imageUrls.length === 0 ||
-      imageUrls.every((url) => !url.trim())
-    ) {
+    if (!productName || !productNumber || !category || !productPrice || !productStock || !productDescription || imageUrls.length === 0 || imageUrls.every((url) => !url.trim())) {
       toast.error("Please fill all required fields and provide at least one image URL");
       return;
     }
@@ -123,7 +114,6 @@ const AddProduct = () => {
       return;
     }
 
-    // Validate image URLs
     const validUrls = imageUrls.filter((url) => url.trim()).map((url) => url.trim());
     if (validUrls.length === 0) {
       toast.error("At least one valid image URL is required");
@@ -150,7 +140,6 @@ const AddProduct = () => {
       productImage: validUrls,
     };
 
-    console.log("Submitting product data:", JSON.stringify(data, null, 2)); // Debug
 
     try {
       const response = await axiosInstance.post("/api/product/add", data, {
@@ -158,7 +147,6 @@ const AddProduct = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log("Add product response:", response.data); // Debug
       if (response.data.success) {
         toast.success("Product added successfully!");
         setImageUrls([""]);
@@ -199,19 +187,10 @@ const AddProduct = () => {
           <div className="space-y-2 mt-2">
             {imageUrls.map((url, index) => (
               <div key={index} className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={url}
-                  onChange={(e) => handleImageUrlChange(index, e.target.value)}
-                  placeholder="Enter Cloudinary image URL"
-                  className="flex-1 outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-                />
+                <input type="text" value={url} onChange={(e) => handleImageUrlChange(index, e.target.value)} placeholder="Enter Cloudinary image URL"
+                  className="flex-1 outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" />
                 {imageUrls.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeImageUrlField(index)}
-                    className="text-red-500"
-                  >
+                  <button type="button" onClick={() => removeImageUrlField(index)} className="text-red-500">
                     Remove
                   </button>
                 )}
@@ -228,55 +207,28 @@ const AddProduct = () => {
           <label className="text-base font-medium" htmlFor="product-name">
             Product Name
           </label>
-          <input
-            onChange={(e) => setProductName(e.target.value)}
-            value={productName}
-            id="product-name"
-            type="text"
-            placeholder="Type here"
-            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-            required
-          />
+          <input onChange={(e) => setProductName(e.target.value)} value={productName} id="product-name" type="text" placeholder="Type here"
+            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required/>
         </div>
         <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="product-number">
             Product Code
           </label>
-          <input
-            onChange={(e) => setProductNumber(e.target.value)}
-            value={productNumber}
-            id="product-number"
-            type="text"
-            placeholder="Type here"
-            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-            required
-          />
+          <input onChange={(e) => setProductNumber(e.target.value)} value={productNumber} id="product-number" type="text" placeholder="Type here"
+            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required />
         </div>
         <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="product-description">
             Product Description
           </label>
-          <textarea
-            onChange={(e) => setProductDescription(e.target.value)}
-            value={productDescription}
-            id="product-description"
-            rows={4}
-            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40 resize-none"
-            placeholder="Type here"
-            required
-          />
+          <textarea onChange={(e) => setProductDescription(e.target.value)} value={productDescription} id="product-description" rows={4}
+            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40 resize-none" placeholder="Type here" required/>
         </div>
         <div className="w-full flex flex-col gap-1">
           <label className="text-base font-medium" htmlFor="category">
             Category
           </label>
-          <select
-            onChange={(e) => setCategory(e.target.value)}
-            value={category}
-            id="category"
-            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-            required
-          >
+          <select onChange={(e) => setCategory(e.target.value)} value={category} id="category" className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required >
             <option value="">Select Category</option>
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
@@ -290,29 +242,15 @@ const AddProduct = () => {
             <label className="text-base font-medium" htmlFor="product-price">
               Product Price
             </label>
-            <input
-              onChange={(e) => setProductPrice(e.target.value)}
-              value={productPrice}
-              id="product-price"
-              type="number"
-              placeholder="0"
-              className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-              required
-            />
+            <input onChange={(e) => setProductPrice(e.target.value)} value={productPrice} id="product-price" type="number" placeholder="0"
+              className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required/>
           </div>
           <div className="flex-1 flex flex-col gap-1 w-32">
             <label className="text-base font-medium" htmlFor="product-stock">
               Total Stock Quantity
             </label>
-            <input
-              onChange={(e) => setProductStock(e.target.value)}
-              value={productStock}
-              id="product-stock"
-              type="number"
-              placeholder="0"
-              className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-              required
-            />
+            <input onChange={(e) => setProductStock(e.target.value)} value={productStock} id="product-stock" type="number" placeholder="0"
+              className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required />
           </div>
         </div>
         <div className="flex flex-col gap-1">
@@ -320,12 +258,7 @@ const AddProduct = () => {
           <div className="flex flex-wrap gap-3">
             {availableSizes.map((size) => (
               <label key={size} className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  checked={sizes.includes(size)}
-                  onChange={() => handleSizeChange(size)}
-                  className="h-4 w-4"
-                />
+                <input type="checkbox" checked={sizes.includes(size)} onChange={() => handleSizeChange(size)} className="h-4 w-4"/>
                 {size}
               </label>
             ))}
@@ -336,12 +269,7 @@ const AddProduct = () => {
           <div className="flex flex-wrap gap-3">
             {availableColors.map((color) => (
               <label key={color} className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  checked={colors.includes(color)}
-                  onChange={() => handleColorChange(color)}
-                  className="h-4 w-4"
-                />
+                <input type="checkbox" checked={colors.includes(color)} onChange={() => handleColorChange(color)} className="h-4 w-4"/>
                 {color}
               </label>
             ))}
@@ -365,16 +293,8 @@ const AddProduct = () => {
                       <td className="border p-2">{size}</td>
                       <td className="border p-2">{color}</td>
                       <td className="border p-2">
-                        <input
-                          type="number"
-                          min="0"
-                          value={
-                            stock.find((item) => item.size === size && item.color === color)
-                              ?.quantity || 0
-                          }
-                          onChange={(e) => handleStockChange(size, color, e.target.value)}
-                          className="w-full p-1 border rounded"
-                        />
+                        <input type="number" min="0" value={ stock.find((item) => item.size === size && item.color === color) ?.quantity || 0 } onChange={(e) => handleStockChange(size, color, e.target.value)}
+                          className="w-full p-1 border rounded" />
                       </td>
                     </tr>
                   ))
@@ -385,11 +305,7 @@ const AddProduct = () => {
             <p>Select sizes and colors to add stock quantities</p>
           )}
         </div>
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="px-8 py-2.5 bg-red-500 text-white font-medium rounded disabled:opacity-50 disabled:cursor-not-allowed"
-        >
+        <button type="submit" disabled={isLoading} className="px-8 py-2.5 bg-red-500 text-white font-medium rounded disabled:opacity-50 disabled:cursor-not-allowed">
           ADD
         </button>
       </form>

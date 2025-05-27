@@ -184,31 +184,11 @@ const Modifycart = ({ product: propProduct }) => {
           <p>Home</p>
         </Link>
         <svg width="8" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="m1 15 7.875-7L1 1"
-            stroke="#6B7280"
-            strokeOpacity=".8"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="m1 15 7.875-7L1 1" stroke="#6B7280" strokeOpacity=".8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
         <p>{product.category?.name || "Men"}</p>
-        <svg
-          width="8"
-          height="16"
-          viewBox="0 0 10 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="m1 15 7.875-7L1 1"
-            stroke="#6B7280"
-            strokeOpacity=".8"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+        <svg width="8" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="m1 15 7.875-7L1 1" stroke="#6B7280" strokeOpacity=".8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
         <p className="text-red-500">Cart</p>
       </div>
@@ -216,72 +196,25 @@ const Modifycart = ({ product: propProduct }) => {
       <div className="md:border-2 rounded border-[#F3F0F0] p-4 mb-10">
         <div className="flex flex-col lg:flex-row">
           <div className="lg:w-152 w-full flex flex-col items-center md:p-4">
-            <img
-              src={images[currentIndex]}
-              className="md:w-3/4 w-full object-contain"
-              alt={`slide ${currentIndex + 1}`}
-              onError={(e) => {
-                console.error('Image load error:', images[currentIndex]);
-                e.target.src = '/placeholder.jpg';
-              }}
-              loading="lazy"
-            />
+            <img src={images[currentIndex]} className="md:w-3/4 w-full object-contain" alt={`slide ${currentIndex + 1}`}
+              onError={(e) => { console.error('Image load error:', images[currentIndex]); e.target.src = '/placeholder.jpg'; }} loading="lazy"/>
             {images.length > 1 && (
               <div className="flex items-center justify-center mt-6 space-x-4">
-                <button
-                  onClick={handlePrev}
-                  className="bg-white shadow p-3 text-gray-500"
-                  disabled={images.length <= 1}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-chevron-left"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
-                    />
+                <button onClick={handlePrev} className="bg-white shadow p-3 text-gray-500" disabled={images.length <= 1}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fillRule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
                   </svg>
                 </button>
                 <div className="md:flex space-x-2 hidden">
                   {images.map((img, index) => (
-                    <img
-                      key={index}
-                      src={img}
-                      className={`w-20 h-14 rounded cursor-pointer object-cover ${
-                        currentIndex === index ? "border-2 border-red-500" : ""
-                      }`}
-                      onClick={() => handleThumbnailClick(index)}
-                      alt={`thumb ${index}`}
-                      onError={(e) => {
-                        console.error('Thumbnail load error:', img);
-                        e.target.src = '/placeholder.jpg';
-                      }}
-                      loading="lazy"
-                    />
+                    <img key={index} src={img} className={`w-20 h-14 rounded cursor-pointer object-cover ${ currentIndex === index ? "border-2 border-red-500" : ""}`}
+                      onClick={() => handleThumbnailClick(index)} alt={`thumb ${index}`}
+                      onError={(e) => { console.error('Thumbnail load error:', img); e.target.src = '/placeholder.jpg';}} loading="lazy"/>
                   ))}
                 </div>
-                <button
-                  onClick={handleNext}
-                  className="bg-white shadow p-3 text-gray-500"
-                  disabled={images.length <= 1}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-chevron-right"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
-                    />
+                <button onClick={handleNext} className="bg-white shadow p-3 text-gray-500" disabled={images.length <= 1}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-chevron-right" viewBox="0 0 16 16">
+                    <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
                   </svg>
                 </button>
               </div>
@@ -313,12 +246,7 @@ const Modifycart = ({ product: propProduct }) => {
                   <h4 className="text-xl font-semibold mb-3">Available Sizes</h4>
                   <div className="flex gap-2 mb-5 md:mb-0">
                     {product?.sizes?.length > 0 ? (
-                      <select
-                        id="size"
-                        className="mt-1 p-2 border rounded-md w-full"
-                        value={selectedSize}
-                        onChange={(e) => setSelectedSize(e.target.value)}
-                      >
+                      <select id="size" className="mt-1 p-2 border rounded-md w-full" value={selectedSize} onChange={(e) => setSelectedSize(e.target.value)}>
                         {product.sizes?.map((size) => (
                           <option key={size} value={size}>
                             {size}
@@ -335,12 +263,8 @@ const Modifycart = ({ product: propProduct }) => {
                   <div className="flex gap-1">
                     {product?.colors?.length > 0 ? (
                       product.colors?.map((color) => (
-                        <button
-                          key={color}
-                          onClick={() => setSelectedColor(color)}
-                          className={`w-10 h-10 rounded-full border-2 ${color === selectedColor ? "border-red-700" : "border-gray-100"}`}
-                          style={{ backgroundColor: color }}
-                        />
+                        <button key={color} onClick={() => setSelectedColor(color)} className={`w-10 h-10 rounded-full border-2 
+                          ${color === selectedColor ? "border-red-700" : "border-gray-100"}`} style={{ backgroundColor: color }}/>
                       ))
                     ) : (
                       <p>No colors available</p>
@@ -349,24 +273,15 @@ const Modifycart = ({ product: propProduct }) => {
                 </div>
               </div>
               <div className="md:flex items-center mb-5">
-                <button
-                  onClick={handleDecrease}
-                  className="bg-red-500 py-3 md:px-4 px-5 cursor-pointer text-white"
-                >
+                <button onClick={handleDecrease} className="bg-red-500 py-3 md:px-4 px-5 cursor-pointer text-white">
                   <FaMinus />
                 </button>
                 <input disabled value={count} className="text-center w-12 mx-2" />
-                <button
-                  onClick={handleIncrease}
-                  className="bg-red-500 py-3 md:px-4 px-5 cursor-pointer text-white"
-                >
+                <button onClick={handleIncrease} className="bg-red-500 py-3 md:px-4 px-5 cursor-pointer text-white">
                   <FaPlus />
                 </button>
               </div>
-              <button
-                onClick={handleAddToCart}
-                className="md:w-102 w-46 bg-red-500 text-white py-3 rounded flex items-center justify-center md:mt-10"
-              >
+              <button onClick={handleAddToCart} className="md:w-102 w-46 bg-red-500 text-white py-3 rounded flex items-center justify-center md:mt-10">
                 <img src={assets.mcart} alt="cart" className="mr-2" />
                 Update Cart
               </button>
@@ -406,13 +321,8 @@ const Modifycart = ({ product: propProduct }) => {
                 {[...Array(5)].map((_, i) => (
                   <i key={i} className={i < review.rating ? "bi bi-star-fill" : "bi bi-star"}></i>
                 ))}
-                <span className="text-sm text-gray-500">
-                  {new Date(review.date).toLocaleDateString()} by{" "}
-                  {typeof review.author === 'object' && review.author?.username
-                    ? review.author.username
-                    : typeof review.author === 'string'
-                    ? review.author
-                    : 'Anonymous'}
+                <span className="text-sm text-gray-500"> {new Date(review.date).toLocaleDateString()} by{" "}
+                  {typeof review.author === 'object' && review.author?.username ? review.author.username : typeof review.author === 'string' ? review.author : 'Anonymous'}
                 </span>
               </div>
             </div>

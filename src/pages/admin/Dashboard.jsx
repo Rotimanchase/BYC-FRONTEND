@@ -4,29 +4,10 @@ import { format, parseISO, startOfDay } from 'date-fns';
 import { assets, currency } from '../../assets/assets';
 import axiosInstance from '../../../axios';
 import toast from 'react-hot-toast';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  TimeScale,
-} from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, TimeScale} from 'chart.js';
 
 // Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  TimeScale
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, TimeScale);
 
 const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message }) => {
   if (!isOpen) return null;
@@ -37,16 +18,10 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message }) => {
         <h3 className="text-lg font-medium text-gray-800 mb-4">{title}</h3>
         <p className="text-sm text-gray-600 mb-6">{message}</p>
         <div className="flex justify-end gap-4">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300"
-          >
+          <button onClick={onClose} className="px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">
             Cancel
           </button>
-          <button
-            onClick={onConfirm}
-            className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
-          >
+          <button onClick={onConfirm} className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600">
             Confirm
           </button>
         </div>
@@ -74,7 +49,6 @@ const Dashboard = () => {
 
   const handleMarkAsPaid = async (orderId) => {
     if (isUpdating) return;
-    console.log('Marking as paid, orderId:', orderId);
     if (!orderId) {
       toast.error('Error: Invalid order ID');
       return;
@@ -102,7 +76,6 @@ const Dashboard = () => {
 
   const handleCancelOrder = async (orderId) => {
     if (isUpdating) return;
-    console.log('Cancelling order, orderId:', orderId);
     if (!orderId) {
       toast.error('Error: Invalid order ID');
       return;
@@ -188,7 +161,6 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        // Fetch all orders without limit for chart data
         const res = await axiosInstance.get('/api/order/admin?page=1&limit=1000');
         if (res.data.success) {
           const mappedOrders = res.data.orders.map((order) => ({
@@ -212,13 +184,6 @@ const Dashboard = () => {
             .slice(0, 8);
           setDashboardData({ orders: recentOrders });
 
-          console.log('Orders mapped:', mappedOrders.map(o => ({
-            id: o.id.substring(0, 8),
-            paymentType: o.paymentType,
-            paymentStatus: o.paymentStatus,
-            orderStatus: o.orderStatus,
-            createdAt: o.createdAt,
-          })));
         } else {
           const message = res.data.message || 'Unknown error';
           setError('Failed to fetch orders: ' + message);
@@ -237,7 +202,6 @@ const Dashboard = () => {
 
   // Prepare chart data
   const chartData = useMemo(() => {
-    // Aggregate orders by day (last 30 days)
     const days = 30;
     const today = startOfDay(new Date());
     const dates = Array.from({ length: days }, (_, i) => {
@@ -276,7 +240,7 @@ const Dashboard = () => {
         {
           label: 'Total Orders',
           data: totalOrdersData,
-          borderColor: 'rgb(239, 68, 68)', // red-500
+          borderColor: 'rgb(239, 68, 68)', 
           backgroundColor: 'rgba(239, 68, 68, 0.2)',
           tension: 0.4,
           fill: false,
@@ -284,16 +248,16 @@ const Dashboard = () => {
         {
           label: 'Revenue',
           data: revenueData,
-          borderColor: 'rgb(59, 130, 246)', // blue-500
+          borderColor: 'rgb(59, 130, 246)', 
           backgroundColor: 'rgba(59, 130, 246, 0.2)',
           tension: 0.4,
           fill: false,
-          hidden: true, // Hide by default to avoid clutter
+          hidden: true, 
         },
         {
           label: 'Paid Orders',
           data: paidOrdersData,
-          borderColor: 'rgb(34, 197, 94)', // green-500
+          borderColor: 'rgb(34, 197, 94)', 
           backgroundColor: 'rgba(34, 197, 94, 0.2)',
           tension: 0.4,
           fill: false,
@@ -301,7 +265,7 @@ const Dashboard = () => {
         {
           label: 'Pending Orders',
           data: pendingOrdersData,
-          borderColor: 'rgb(234, 179, 8)', // yellow-500
+          borderColor: 'rgb(234, 179, 8)', 
           backgroundColor: 'rgba(234, 179, 8, 0.2)',
           tension: 0.4,
           fill: false,
@@ -309,7 +273,7 @@ const Dashboard = () => {
         {
           label: 'Cancelled Orders',
           data: cancelledOrdersData,
-          borderColor: 'rgb(107, 114, 128)', // gray-500
+          borderColor: 'rgb(107, 114, 128)',
           backgroundColor: 'rgba(107, 114, 128, 0.2)',
           tension: 0.4,
           fill: false,
@@ -408,8 +372,7 @@ const Dashboard = () => {
       <h2 className="text-xl text-blue-950/70 font-medium mb-5 md:block hidden">Sales Statistics</h2>
       <div className="w-full max-w-5xl bg-white border border-gray-300 rounded-lg p-4 mb-8 md:block hidden">
         {allOrders.length > 0 ? (
-          <Line
-            data={chartData}
+          <Line data={chartData}
             options={{
               responsive: true,
               plugins: {
@@ -426,18 +389,10 @@ const Dashboard = () => {
                 title: {
                   display: true,
                   text: 'Sales Metrics Over Time (Last 30 Days)',
-                  font: {
-                    size: 16,
-                    weight: 'bold',
-                  },
-                  padding: {
-                    top: 10,
-                    bottom: 20,
-                  },
+                  font: { size: 16, weight: 'bold' },
+                  padding: { top: 10, bottom: 20 },
                 },
-                tooltip: {
-                  mode: 'index',
-                  intersect: false,
+                tooltip: { mode: 'index', intersect: false,
                   callbacks: {
                     label: (context) => {
                       const dataset = context.dataset;
@@ -452,27 +407,15 @@ const Dashboard = () => {
               },
               scales: {
                 x: {
-                  title: {
-                    display: true,
-                    text: 'Date',
-                  },
+                  title: { display: true, text: 'Date' },
                 },
                 y: {
-                  title: {
-                    display: true,
-                    text: 'Value',
-                  },
+                  title: { display: true, text: 'Value' },
                   beginAtZero: true,
                 },
               },
-              interaction: {
-                mode: 'nearest',
-                axis: 'x',
-                intersect: false,
-              },
-            }}
-            aria-label="Sales statistics chart showing total orders, revenue, paid orders, pending orders, and cancelled orders over the last 30 days"
-          />
+              interaction: { mode: 'nearest', axis: 'x', intersect: false, },
+            }} aria-label="Sales statistics chart showing total orders, revenue, paid orders, pending orders, and cancelled orders over the last 30 days"/>
         ) : (
           <div className="flex flex-col items-center justify-center h-48">
             <p className="text-lg font-medium text-gray-500 mb-2">No sales data available</p>
@@ -508,11 +451,7 @@ const Dashboard = () => {
                     {currency}{Number(item.totalPrice).toLocaleString()}
                   </td>
                   <td className="py-3 px-4 text-gray-700 border-t border-gray-300 text-center w-">
-                    <span className={`py-1 px-2 md:text-xs text-[10px] rounded-full ${
-                      item.paymentType === 'Online Payment' 
-                        ? 'bg-blue-100 text-blue-600' 
-                        : 'bg-gray-100 text-gray-600'
-                    }`}>
+                    <span className={`py-1 px-2 md:text-xs text-[10px] rounded-full ${ item.paymentType === 'Online Payment' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600' }`}>
                       {item.paymentType === 'Online Payment' ? 'Stripe' : 'Bank Transfer'}
                     </span>
                   </td>
@@ -527,38 +466,20 @@ const Dashboard = () => {
                       </span>
                     ) : (
                       <div className="relative inline-block text-left">
-                        <button onClick={() => setActiveDropdown(activeDropdown === item.id ? null : item.id)}
-                          className="py-1 px-3 text-xs rounded-full bg-amber-200 text-yellow-600 hover:bg-amber-300" >
+                        <button onClick={() => setActiveDropdown(activeDropdown === item.id ? null : item.id)} className="py-1 px-3 text-xs rounded-full bg-amber-200 text-yellow-600 hover:bg-amber-300" >
                           Pending
                         </button>
                         {activeDropdown === item.id && (
                           <div className="absolute z-10 mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div className="py-1 text-sm text-gray-700">
-                              <button
-                                onClick={() =>
-                                  openModal(
-                                    item.id,
-                                    'mark-paid',
-                                    'Mark as Paid',
-                                    'Are you sure you want to mark this order as paid?'
-                                  )
-                                }
+                              <button onClick={() => openModal(item.id, 'mark-paid', 'Mark as Paid', 'Are you sure you want to mark this order as paid?')}
                                 disabled={isUpdating === item.id}
-                                className={`block w-full px-4 py-2 text-left hover:bg-gray-100 ${isUpdating === item.id ? 'opacity-50 cursor-not-allowed' : ''}`} >
+                                className={`block w-full px-4 py-2 text-left hover:bg-gray-100 ${isUpdating === item.id ? 'opacity-50 cursor-not-allowed' : ''}`}>
                                 {isUpdating === item.id ? 'Updating...' : 'Mark as Paid'}
                               </button>
-                              <button
-                                onClick={() =>
-                                  openModal(
-                                    item.id,
-                                    'cancel',
-                                    'Cancel Order',
-                                    'Are you sure you want to cancel this order?'
-                                  )
-                                }
+                              <button onClick={() => openModal(item.id, 'cancel', 'Cancel Order', 'Are you sure you want to cancel this order?')}
                                 disabled={isUpdating === item.id}
-                                className={`block w-full px-4 py-2 text-left hover:bg-gray-100 text-red-600 ${isUpdating === item.id ? 'opacity-50 cursor-not-allowed' : ''}`}
-                              >
+                                className={`block w-full px-4 py-2 text-left hover:bg-gray-100 text-red-600 ${isUpdating === item.id ? 'opacity-50 cursor-not-allowed' : ''}`}>
                                 {isUpdating === item.id ? 'Updating...' : 'Cancel Order'}
                               </button>
                             </div>
@@ -583,13 +504,7 @@ const Dashboard = () => {
         </table>
       </div>
 
-      <ConfirmModal
-        isOpen={modalState.isOpen}
-        onClose={closeModal}
-        onConfirm={confirmAction}
-        title={modalState.title}
-        message={modalState.message}
-      />
+      <ConfirmModal isOpen={modalState.isOpen} onClose={closeModal} onConfirm={confirmAction} title={modalState.title} message={modalState.message}/>
     </div>
   );
 };

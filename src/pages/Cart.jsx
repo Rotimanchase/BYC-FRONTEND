@@ -80,12 +80,9 @@ const Cart = () => {
           <div className="mx-4 md:ml-15 border-t-2 border-b-2 border-[#F3F0F0] pt-5 pb-10">
             {Array.isArray(cart) && cart.length > 0 ? (
               cart.map((item, index) => (
-                <div key={`${item.productId?._id || 'unknown'}-${item.size || ''}-${item.color || ''}-${index}`}
-                  className="mb-10">
+                <div key={`${item.productId?._id || 'unknown'}-${item.size || ''}-${item.color || ''}-${index}`} className="mb-10">
                   <div className="md:flex">
-                    <img className="md:w-70 w-full h-60 mr-5 mt-5"
-                      src={item.productId?.productImage?.length > 0
-                          ? item.productId.productImage[0] : '/placeholder.jpg'}/>
+                    <img className="md:w-70 w-full h-60 mr-5 mt-5" src={item.productId?.productImage?.length > 0 ? item.productId.productImage[0] : '/placeholder.jpg'}/>
                     <div className="mt-5 md:w-1/3">
                       <h1 className="text-2xl font-bold">{item.productId?.productName || 'Untitled Product'}</h1>
                       <h1 className="text-xl mb-5  mt-1">
@@ -115,15 +112,8 @@ const Cart = () => {
                             onClick={() => handleDecrease(item.productId?._id, item.size, item.color)}>
                             <FiMinus className="text-white" />
                           </button>
-                          <input
-                            className="border-0 outline-none text-center w-16"
-                            value={item.quantity}
-                            disabled
-                          />
-                          <button
-                            className="bg-red-600 border-0 py-3 px-4"
-                            onClick={() => handleIncrease(item.productId?._id, item.size, item.color)}
-                          >
+                          <input className="border-0 outline-none text-center w-16" value={item.quantity} disabled/>
+                          <button className="bg-red-600 border-0 py-3 px-4" onClick={() => handleIncrease(item.productId?._id, item.size, item.color)}>
                             <FiPlus className="text-white" />
                           </button>
                         </div>
@@ -161,14 +151,10 @@ const Cart = () => {
                 </h1>
               </div>
               <div className="flex md:ml-30 gap-5 mb-6">
-                <Link
-                  className="flex items-center border-1 border-red-500 text-red-500 text-sm rounded-[10px] md:px-17 md:py-3 py-2 px-3"
-                  to="/product">
+                <Link className="flex items-center border-1 border-red-500 text-red-500 text-sm rounded-[10px] md:px-17 md:py-3 py-2 px-3" to="/product">
                   Continue Shopping
                 </Link>
-                <Link
-                  className="flex items-center bg-red-500 text-white rounded-[10px] md:px-17 md:py-3 py-2 px-3"
-                  to="/checkout">
+                <Link className="flex items-center bg-red-500 text-white rounded-[10px] md:px-17 md:py-3 py-2 px-3" to="/checkout">
                   Proceed to Checkout
                 </Link>
               </div>

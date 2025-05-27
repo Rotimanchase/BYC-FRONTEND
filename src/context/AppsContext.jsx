@@ -103,14 +103,7 @@ export const AppsProvider = ({ children }) => {
         }
       } catch (_) {}
 
-      const response = await axiosInstance.post('/api/cart/add', {
-        userId: user._id,
-        productId,
-        quantity: quantity || 1,
-        size: size || null,
-        color: color || null,
-      });
-
+      const response = await axiosInstance.post('/api/cart/add', { userId: user._id, productId, quantity: quantity || 1, size: size || null, color: color || null, });
       if (response.data.success) {
         setCart(response.data.cart?.items || []);
         toast.success('Product added to cart!');
@@ -353,10 +346,6 @@ export const AppsProvider = ({ children }) => {
     }
   }, [user]);
 
-  const refreshProducts = async () => {
-    // console.log('Refreshing products');
-  };
-
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
     if (token) {
@@ -462,8 +451,7 @@ export const AppsProvider = ({ children }) => {
         fetchRecentlyViewed,
         refreshProducts,
         loginUser,
-      }}
-    >
+      }}>
       {children}
     </AppsContext.Provider>
   );

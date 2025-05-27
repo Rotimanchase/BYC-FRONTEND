@@ -72,28 +72,14 @@ const AdminProducts = () => {
                     <td className="border p-2">{stockItem.size}</td>
                     <td className="border p-2">{stockItem.color}</td>
                     <td className="border p-2">
-                      <input
-                        type="number"
-                        value={stockItem.quantity}
-                        onChange={(e) => {
-                          const newStock = [...product.stock];
-                          newStock[idx].quantity = Number(e.target.value);
-                          const newProductStock = newStock.reduce((sum, item) => sum + item.quantity, 0);
-                          handleUpdateStock(product._id, newStock, newProductStock);
-                        }}
-                        className="w-16 text-center border rounded"
-                        min="0"
-                      />
+                      <input type="number" value={stockItem.quantity}
+                        onChange={(e) => { const newStock = [...product.stock]; newStock[idx].quantity = Number(e.target.value);
+                          const newProductStock = newStock.reduce((sum, item) => sum + item.quantity, 0); handleUpdateStock(product._id, newStock, newProductStock);
+                        }} className="w-16 text-center border rounded" min="0"/>
                     </td>
                     <td className="border p-2">
-                      <button
-                        onClick={() => {
-                          const newStock = product.stock.filter((_, i) => i !== idx);
-                          const newProductStock = newStock.reduce((sum, item) => sum + item.quantity, 0);
-                          handleUpdateStock(product._id, newStock, newProductStock);
-                        }}
-                        className="text-red-500"
-                      >
+                      <button onClick={() => { const newStock = product.stock.filter((_, i) => i !== idx); const newProductStock = newStock.reduce((sum, item) => sum + item.quantity, 0);
+                          handleUpdateStock(product._id, newStock, newProductStock); }} className="text-red-500" >
                         Remove
                       </button>
                     </td>
@@ -108,14 +94,9 @@ const AdminProducts = () => {
               )}
             </tbody>
           </table>
-          <button
-            onClick={() => {
-              const newStock = [...product.stock, { size: product.sizes[0] || 'S', color: product.colors[0] || 'Red', quantity: 0 }];
+          <button onClick={() => { const newStock = [...product.stock, { size: product.sizes[0] || 'S', color: product.colors[0] || 'Red', quantity: 0 }];
               handleUpdateStock(product._id, newStock, product.productStock);
-            }}
-            className="bg-blue-500 text-white py-2 px-4 mt-4 rounded"
-            disabled={product.sizes.length === 0 || product.colors.length === 0}
-          >
+            }} className="bg-blue-500 text-white py-2 px-4 mt-4 rounded" disabled={product.sizes.length === 0 || product.colors.length === 0}>
             Add Stock Variant
           </button>
         </div>

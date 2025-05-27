@@ -1,15 +1,12 @@
 import axios from 'axios';
 
 const API_BASE = import.meta.env.VITE_API_URL || 
-  (import.meta.env.MODE === 'production' 
-    ? 'https://byc-backend.vercel.app/'  // ⚠️ REPLACE with your actual backend URL
-    : 'http://localhost:4800'
-  );
+  (import.meta.env.MODE === 'production' ? 'https://byc-backend.vercel.app/' : 'http://localhost:4800');
 
 const axiosInstance = axios.create({
-  baseURL: API_BASE, // ✅ Fixed: was hardcoded to localhost
+  baseURL: API_BASE, 
   withCredentials: true,
-  timeout: 30000, // 30 seconds timeout for mobile networks
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
   },

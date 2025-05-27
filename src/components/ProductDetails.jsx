@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import axiosInstance from "../../axios";
 import Modifycart from "../pages/ModifyCart";
 import { useAppContext } from "../context/AppsContext";
-// import { useAppContext } from '../context/appContext';
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -16,7 +15,6 @@ const ProductDetail = () => {
     const { refreshProducts, fetchRecentlyViewed } = useAppContext();
 
     useEffect(() => {
-        // Track recently viewed product
         const trackRecentlyViewed = () => {
           const viewedIds = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
           const updatedIds = viewedIds.filter(viewedId => viewedId !== id);
@@ -30,7 +28,7 @@ const ProductDetail = () => {
                 if (response.data.success) {
                     setProduct(response.data.product);
                     trackRecentlyViewed();
-                    await fetchRecentlyViewed(); // Ensure RecentlyView updates
+                    await fetchRecentlyViewed(); 
                 } else {
                     setError("Failed to load product");
                 }
@@ -98,17 +96,14 @@ const ProductDetail = () => {
 
     return (
         <div className="mx-auto p-4">
-            {/* Product Details via Modifycart */}
             <Modifycart product={product} />
 
-            {/* Rating and Reviews Section */}
             <div className="mt-8 mx-15">
                 <h3 className="text-xl font-bold">Ratings & Reviews</h3>
                 <p className="text-lg">
                     Average Rating: {product.ratings?.toFixed(1) || 0} / 5 ({product.totalReviews || 0} reviews)
                 </p>
 
-                {/* Reviews List */}
                 <div className="mt-4">
                     <h4 className="text-lg font-semibold">Customer Reviews</h4>
                     {product.reviews?.length === 0 ? (
@@ -121,11 +116,8 @@ const ProductDetail = () => {
                                     <p>Rating: {review.rating}/5</p>
                                     <p>{review.description}</p>
                                     <p className="text-sm text-gray-600">
-                                        By {typeof review.author === 'object' && review.author?.username 
-                                            ? review.author.username 
-                                            : typeof review.author === 'string' 
-                                            ? review.author 
-                                            : 'Anonymous'} on{" "}
+                                        By {typeof review.author === 'object' && review.author?.username  ? review.author.username  : typeof review.author === 'string' 
+                                            ? review.author  : 'Anonymous'} on{" "}
                                         {new Date(review.date).toLocaleDateString()}
                                     </p>
                                 </li>
@@ -141,44 +133,17 @@ const ProductDetail = () => {
                     <form onSubmit={handleSubmitReview} className="space-y-4">
                         <div>
                             <label className="block">Title:</label>
-                            <input
-                                type="text"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                className="border p-2 w-full"
-                                required
-                                minLength={3}
-                                maxLength={100}
-                            />
+                            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="border p-2 w-full" required minLength={3}  maxLength={100} />
                         </div>
                         <div>
                             <label className="block">Review:</label>
-                            <textarea
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                className="border p-2 w-full"
-                                required
-                                minLength={10}
-                                maxLength={500}
-                            />
+                            <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="border p-2 w-full" required minLength={10} maxLength={500}/>
                         </div>
                         <div>
                             <label className="block">Rating (1-5):</label>
-                            <input
-                                type="number"
-                                min="1"
-                                max="5"
-                                value={rating}
-                                onChange={(e) => setRating(e.target.value)}
-                                className="border p-2 w-20"
-                                required
-                            />
+                            <input type="number" min="1" max="5" value={rating} onChange={(e) => setRating(e.target.value)} className="border p-2 w-20" required/>
                         </div>
-                        <button
-                            type="submit"
-                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                            disabled={!isAuthenticated}
-                        >
+                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled={!isAuthenticated}>
                             Submit Review
                         </button>
                     </form>

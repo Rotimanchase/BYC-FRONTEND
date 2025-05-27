@@ -13,31 +13,18 @@ export default function Navbar() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userDropdownRef = useRef(null);
   const shopDropdownRef = useRef(null);
-  const mobileMenuRef = useRef(null); // New ref for mobile menu
+  const mobileMenuRef = useRef(null);
   const { cart, searchQuery, setSearchQuery, user, logout } = useAppContext();
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
   const darkBgPage = ['/wishlist'];
   const isDarkBg = darkBgPage.includes(path);
-  // const [user, setUser] = useState(null);
 
-  // Helper function to get first name
   const getFirstName = (fullName) => {
     if (!fullName) return 'User';
     return fullName.split(' ')[0];
   };
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token');
-  //   const userData = localStorage.getItem('user');
-  //   if (token && userData) {
-  //     setUser(JSON.parse(userData));
-  //   } else {
-  //     setUser(null);
-  //   }
-  // }, [location]);
-  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -47,7 +34,7 @@ export default function Navbar() {
       if (isOutsideUser && isOutsideShop && isOutsideMobileMenu) {
         setShowUserMenu(false);
         setShowShopDropdown(false);
-        setIsOpen(false); // Close hamburger menu
+        setIsOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -83,7 +70,6 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    // Use the logout function from context instead of manual cleanup
     logout();
     setShowUserMenu(false);
     setIsOpen(false);
@@ -109,7 +95,6 @@ export default function Navbar() {
   return (
     <nav className={`${isDarkBg ? 'bg-black text-white' : 'bg-white'} relative`}>
       <div className="flex items-center justify-between h-16 md:h-20 px-4 md:px-8">
-        {/* Desktop Left section */}
         <div className="hidden md:flex space-x-6">
           <button onClick={toggleShopDropdown} className={`${isDarkBg ? '' : 'text-gray-700 hover:text-black'} cursor-pointer`} >
             Shop Products
@@ -130,13 +115,7 @@ export default function Navbar() {
             </Link>
           ) : (
             <div className={`flex items-center border-b pb-1 w-full max-w-[200px] ${isDarkBg ? 'border-white' : 'border-gray-500'}`}>
-              <input
-                onChange={(e) => setSearchQuery(e.target.value)}
-                type="text"
-                placeholder="Search Product"
-                className="bg-transparent border-none w-full focus:outline-none"
-                autoFocus
-              />
+              <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search Product" className="bg-transparent border-none w-full focus:outline-none" autoFocus/>
               <button onClick={toggleSearch} className="p-0 ml-2">
                 <FaSearch />
               </button>
@@ -152,13 +131,7 @@ export default function Navbar() {
             </Link>
           ) : (
             <div className={`flex items-center border-b pb-1 w-full ${isDarkBg ? 'border-white' : 'border-gray-500'}`}>
-              <input
-                onChange={(e) => setSearchQuery(e.target.value)}
-                type="text"
-                placeholder="Search Product"
-                className="bg-transparent border-none w-full focus:outline-none"
-                autoFocus
-              />
+              <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search Product" className="bg-transparent border-none w-full focus:outline-none" autoFocus />
               <button onClick={toggleSearch} className="p-0 ml-2">
                 <FaSearch />
               </button>
@@ -168,26 +141,15 @@ export default function Navbar() {
 
         {/* Desktop Right section */}
         <div className="hidden md:flex items-center space-x-6 text-gray-700">
-          <Link
-            to="/about"
-            className={`${isDarkBg ? 'text-white' : 'text-gray-700 hover:text-black'}`}
-          >
+          <Link to="/about" className={`${isDarkBg ? 'text-white' : 'text-gray-700 hover:text-black'}`}>
             About Us
           </Link>
-          <Link
-            to="/contact"
-            className={`${isDarkBg ? 'text-white' : 'text-gray-700 hover:text-black'}`}
-          >
+          <Link to="/contact" className={`${isDarkBg ? 'text-white' : 'text-gray-700 hover:text-black'}`}>
             Contact
           </Link>
           
-          <button
-            onClick={toggleSearch}
-            className={`ml-2 ${showSearch ? 'hidden' : 'block'}`}
-          >
-            <FiSearch
-              className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
-            />
+          <button onClick={toggleSearch} className={`ml-2 ${showSearch ? 'hidden' : 'block'}`} >
+            <FiSearch className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}/>
           </button>
 
           {user ? (
@@ -213,21 +175,16 @@ export default function Navbar() {
             </div>
           ) : (
             <button onClick={() => navigate('/account')}>
-              <FiUser
-                className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}/>
+              <FiUser className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}/>
             </button>
           )}
 
           <Link to="/wishlist" className="relative">
-            <FiHeart
-              className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
-            />
+            <FiHeart className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}/>
           </Link>
           
           <Link to="/cart" className="relative">
-            <FiShoppingCart
-              className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}
-            />
+            <FiShoppingCart className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`}/>
             {Array.isArray(cart) && cart.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
                 {cart.reduce((total, item) => total + item.quantity, 0)}
@@ -263,46 +220,23 @@ export default function Navbar() {
 
               {showUserMenu && (
                 <div className="absolute top-8 right-0 bg-white text-black shadow-lg p-2 text-sm rounded-md z-50 min-w-32">
-                  <button
-                    onClick={() => {
-                      navigate('/my-orders');
-                      setShowUserMenu(false);
-                      setIsOpen(false); // Close hamburger menu
-                    }}
-                    className="block px-4 py-2 hover:bg-gray-100 w-full text-center"
-                  >
+                  <button onClick={() => { navigate('/my-orders'); setShowUserMenu(false); setIsOpen(false); }} className="block px-4 py-2 hover:bg-gray-100 w-full text-center">
                     My Orders
                   </button>
-                  <button
-                    onClick={handleLogout}
-                    className="block px-4 py-2 hover:bg-gray-100 w-full text-center"
-                  >
+                  <button onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100 w-full text-center">
                     Logout
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            <button onClick={() => {
-              navigate('/account');
-              setIsOpen(false); // Close hamburger menu
-            }}>
+            <button onClick={() => { navigate('/account'); setIsOpen(false); }}>
               <FiUser className={`w-5 h-5 ${isDarkBg ? 'text-white' : 'hover:text-black'}`} />
             </button>
           )}
 
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className={`focus:outline-none ${isDarkBg ? 'text-white' : 'text-gray-700'}`}
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              viewBox="0 0 24 24"
-              strokeLinecap="round"
-              strokeLinejoin="round">
+          <button onClick={() => setIsOpen(!isOpen)} className={`focus:outline-none ${isDarkBg ? 'text-white' : 'text-gray-700'}`}>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2}  viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
               {isOpen ? (
                 <path d="M6 18L18 6M6 6l12 12" />
               ) : (
@@ -333,27 +267,15 @@ export default function Navbar() {
             </div>
           )}
           
-          <Link
-            to="/blogs"
-            className={`block ${isDarkBg ? 'text-black' : 'hover:text-black'} py-2`}
-            onClick={() => setIsOpen(false)} // Close hamburger menu
-          >
+          <Link to="/blogs" className={`block ${isDarkBg ? 'text-black' : 'hover:text-black'} py-2`} onClick={() => setIsOpen(false)} >
             Blog
           </Link>
           
-          <a
-            href="#"
-            className={`block ${isDarkBg ? 'text-black' : 'hover:text-black'} py-2`}
-            onClick={() => setIsOpen(false)} // Close hamburger menu
-          >
+          <a href="#" className={`block ${isDarkBg ? 'text-black' : 'hover:text-black'} py-2`} onClick={() => setIsOpen(false)}>
             FAQ
           </a>
           
-          <Link
-            to="/about"
-            className={`block ${isDarkBg ? 'text-black' : 'hover:text-black'} py-2`}
-            onClick={() => setIsOpen(false)} // Close hamburger menu
-          >
+          <Link to="/about" className={`block ${isDarkBg ? 'text-black' : 'hover:text-black'} py-2`} onClick={() => setIsOpen(false)}>
             About Us
           </Link>
           

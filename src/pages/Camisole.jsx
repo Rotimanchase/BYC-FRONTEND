@@ -69,7 +69,6 @@ const Camisole = () => {
 
   return (
     <div className='mt-10'>
-      {/* Breadcrumb */}
       <div className="flex items-center space-x-2 text-sm text-gray-500 bg-white py-8 pl-5 md:pl-15">
         <Link to='/' type="button">
           <p>Home</p>
@@ -85,18 +84,11 @@ const Camisole = () => {
       </div>
 
       <div className='md:mx-10 mx-2 pt-15 md:mt-5 pb-8 px-3 md:px-10'>
-        {/* Header with Sort Button */}
         <div className='flex justify-between mb-2 md:mb-5'>
           <h1 className='md:text-2xl text-xl font-bold'>Women's Camisole</h1>
-          <SortBtn 
-            variant="red" 
-            data={filteredProducts} 
-            setData={setFilteredProducts} 
-            defaultSort='Most Sold' 
-          />
+          <SortBtn  variant="red"  data={filteredProducts}  setData={setFilteredProducts}  defaultSort='Most Sold' />
         </div>
 
-        {/* Product Count and View Toggle */}
         <div className='border-b-2 border-t-2 p-10 border-gray-200 flex justify-between'>
           <p className='mt-5'>
             {loading ? 'Loading...' : `${filteredProducts.length} Product${filteredProducts.length !== 1 ? 's' : ''} Found`}
@@ -104,7 +96,6 @@ const Camisole = () => {
           <ViewToggle activeView={activeView} setActiveView={setActiveView} />
         </div>
 
-        {/* Loading State */}
         {loading ? (
           <div className='text-center py-16'>
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
@@ -113,10 +104,7 @@ const Camisole = () => {
         ) : error ? (
           <div className='text-center py-16'>
             <p className='text-red-500 text-lg'>{error}</p>
-            <button 
-              onClick={() => window.location.reload()} 
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
-            >
+            <button  onClick={() => window.location.reload()}  className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">
               Try Again
             </button>
           </div>
@@ -126,40 +114,16 @@ const Camisole = () => {
             <p className='text-gray-500 mt-2'>Check back later for new arrivals!</p>
           </div>
         ) : (
-          <div className={`${
-              activeView === 'grid' 
-                ? 'grid grid-cols-2 md:grid-cols-5 md:gap-4 gap-2' 
-                : 'flex flex-col gap-6'
-            } mb-8 mt-8`}
-          >
+          <div className={`${ activeView === 'grid' ? 'grid grid-cols-2 md:grid-cols-5 md:gap-4 gap-2'  : 'flex flex-col gap-6'} mb-8 mt-8`}>
             {filteredProducts.map((product, index) => (
-              <div
-                key={product._id}
-                className={`hover:-translate-y-1 hover:shadow-2xl transition duration-300 rounded ${
-                  activeView === 'grid' ? 'md:pt-8 pt-3' : 'flex gap-6 items-center'
-                }`}
-              >
-                <div
-                  onMouseEnter={() => setIsHover(index)}
-                  onMouseLeave={() => setIsHover(null)}
-                  onClick={() => handleProductClick(product._id)}
-                  className={activeView === 'list' ? 'flex w-full pl-5' : ''}
-                >
+              <div key={product._id}
+                className={`hover:-translate-y-1 hover:shadow-2xl transition duration-300 rounded ${ activeView === 'grid' ? 'md:pt-8 pt-3' : 'flex gap-6 items-center' }`}>
+                <div onMouseEnter={() => setIsHover(index)} onMouseLeave={() => setIsHover(null)}
+                  onClick={() => handleProductClick(product._id)} className={activeView === 'list' ? 'flex w-full pl-5' : ''}>
                   <Link to={`/product/${product._id}`} className="block">
-                    <img 
-                      className={`rounded-t object-cover ${
-                        activeView === 'list'
-                          ? 'md:w-full h-32 w-24 md:h-full rounded'
-                          : 'w-full h-40 md:h-60'
-                      }`}
-                      src={
-                        product.productImage && product.productImage.length > 0
-                          ? product.productImage[0]
-                          : '/placeholder.jpg'
-                      } 
-                      alt={product.productName || 'Camisole'}
-                      loading="lazy"
-                    />
+                    <img  className={`rounded-t object-cover ${ activeView === 'list' ? 'md:w-full h-32 w-24 md:h-full rounded' : 'w-full h-40 md:h-60' }`}
+                      src={ product.productImage && product.productImage.length > 0 ? product.productImage[0] : '/placeholder.jpg' } 
+                      alt={product.productName || 'Camisole'} loading="lazy"/>
                   </Link>
                   
                   <div className={activeView === 'list' ? 'pl-6 flex-1' : 'pl-3'}>
@@ -198,43 +162,23 @@ const Camisole = () => {
                       </p>
                     </div>
                     
-                    {/* Action Buttons */}
                     <div className='relative'>
-                      <div className={`absolute ${
-                          isHover === index ? 'flex' : 'hidden'
-                        } ${
-                          activeView === 'list' 
-                            ? 'flex-col md:flex-row mt-1' 
-                            : 'flex-row'
-                        } md:gap-4 gap-2 w-full z-10`}
-                      >
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleWishlist(product);
-                          }}
-                          className='flex items-center justify-center gap-2 border border-red-500 md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-50 transition-colors cursor-pointer'
-                        >
+                      <div className={`absolute ${ isHover === index ? 'flex' : 'hidden'} ${ activeView === 'list'  ? 'flex-col md:flex-row mt-1' : 'flex-row' } md:gap-4 gap-2 w-full z-10`}>
+                        <button onClick={(e) => { e.preventDefault(); handleWishlist(product); }}
+                          className='flex items-center justify-center gap-2 border border-red-500 md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-50 transition-colors cursor-pointer'>
                           <img src={assets.wishlove} alt='Add to Wishlist' className='md:h-4 md:w-4 hidden md:block' />
                           <span className='text-red-600 font-semibold text-xs md:text-sm'>Wishlist</span>
                         </button>
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleCart(product._id);
-                          }}
-                          className='flex items-center justify-center gap-2 bg-red-600 text-white md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-700 transition-colors cursor-pointer disabled:opacity-50'
-                          disabled={product.productStock <= 0}
-                        >
+                        <button onClick={(e) => { e.preventDefault(); handleCart(product._id);}}
+                          className='flex items-center justify-center gap-2 bg-red-600 text-white md:px-5 md:py-2 px-2 py-1 rounded-md
+                           hover:bg-red-700 transition-colors cursor-pointer disabled:opacity-50' disabled={product.productStock <= 0}>
                           <img src={assets.wishcart} alt='Add to Cart' className='md:h-4 md:w-4 hidden md:block' />
                           <span className='font-semibold text-xs md:text-sm'>
                             {product.productStock <= 0 ? 'Out of Stock' : 'Buy Now'}
                           </span>
                         </button>
                       </div>
-                      <div className={`${
-                        activeView === 'list' ? 'min-h-24 md:min-h-16' : 'min-h-14'
-                      }`}></div>
+                      <div className={`${ activeView === 'list' ? 'min-h-24 md:min-h-16' : 'min-h-14' }`}></div>
                     </div>
                   </div>
                 </div>

@@ -105,26 +105,16 @@ const Blog = () => {
             <h3 className="md:text-4xl text-1xl font-bold mb-5 md:mb-18 mt-5">{item.blogTitle}</h3>
             <p className="text-justify text-sm md:text-2xl">{truncateDescription(item.blogDescription)}</p>
             <div>
-              <Link
-                to={`/blogs/${item._id}`}
-                className="inline-flex items-center gap-2 border border-black md:px-6 px-4 py-2 md:py-3 mt-6 font-bold text-sm transition"
-              >
+              <Link to={`/blogs/${item._id}`} className="inline-flex items-center gap-2 border border-black md:px-6 px-4 py-2 md:py-3 mt-6 font-bold text-sm transition">
                 Read More <img src={assets.larrow} alt="arrow" className="w-4 h-4" />
               </Link>
             </div>
             <div className="flex items-center gap-8 lg:gap-15 md:gap-6 bg-[#E0E0E0] w-63 lg:w-100 md:w-60 mt-4 md:mt-10 mb-1 p-2">
-              <img
-                src={item.authorImage}
-                alt="author"
-                className="w-10 h-10 rounded-full object-cover"
-              />
+              <img src={item.authorImage} alt="author" className="w-10 h-10 rounded-full object-cover"/>
               <p className="flex items-center gap-3 lg:gap-4 md:gap-2">
                 <FiEye /> {item.blogViews}
               </p>
-              <button
-                onClick={() => handleLike(item._id)}
-                className="flex items-center gap-3 md:gap-4 hover:text-red-500 transition"
-              >
+              <button onClick={() => handleLike(item._id)} className="flex items-center gap-3 md:gap-4 hover:text-red-500 transition">
                 <FiHeart /> {item.blogLikes}
               </button>
             </div>
@@ -137,11 +127,7 @@ const Blog = () => {
       ))}
 
       <div className="mt-10">
-        <Pargination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          setCurrentPage={setCurrentPage}
-        />
+        <Pargination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage}/>
       </div>
     </div>
   );

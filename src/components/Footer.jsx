@@ -1,13 +1,11 @@
 import React from 'react'
 import { assets } from '../assets/assets'
-// import { fb, footarrow, insta, mail, pay, phone, twi, yt } from '../assets'
 
 const Footer = () => {
   return (
     <footer className="bg-black text-white mt-30 py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-          {/* Company Info */}
           <div>
             <h5 className="text-lg font-semibold mb-4">Company Info</h5>
             <ul className="space-y-2">
@@ -17,7 +15,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Help & Support */}
           <div>
             <h5 className="text-lg font-semibold mb-4">Help & Support</h5>
             <ul className="space-y-2">
@@ -29,7 +26,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Customer Care */}
           <div>
             <h5 className="text-lg font-semibold mb-4">Customer Care</h5>
             <ul className="space-y-2">
@@ -40,7 +36,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Newsletter */}
           <div>
             <h5 className="text-lg font-semibold mb-4">Signup For The Latest News</h5>
             <form className="relative mb-6">
@@ -70,7 +65,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Social Icons */}
         <div className="flex justify-center space-x-6 border-t border-white mt-10 pt-6">
           <a href="#"><img src={assets.fb} alt="facebook" className="w-15 h-15" /></a>
           <a href="#"><img src={assets.insta} alt="instagram" className="w-15 h-15" /></a>
@@ -78,7 +72,6 @@ const Footer = () => {
           <a href="#"><img src={assets.yt} alt="youtube" className="w-15 h-15" /></a>
         </div>
 
-        {/* Footer Note */}
         <div className="text-center mt-6 text-sm text-gray-400">
           <small>All rights reserved. &copy; bycafrica 2021</small>
         </div>

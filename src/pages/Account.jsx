@@ -9,30 +9,8 @@ const Account = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
-  const { fetchCart, loginUser } = useAppContext();
+  const { loginUser } = useAppContext();
   const navigate = useNavigate();
-
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-
-  //   try {
-  //     const api = isSignUp ? '/api/user/register' : '/api/user/login';
-  //     const payload = isSignUp ? { name, email, password } : { email, password };
-
-  //     const { data } = await axiosInstance.post(api, payload);
-
-  //     if (data.success) {
-  //       await loginUser(responseToken);
-  //       toast.success(isSignUp ? 'Account created!' : 'Logged in successfully');
-  //       await fetchCart(); // Fetch cart after login/signup
-  //       navigate('/');
-  //     } else {
-  //       toast.error(data.message);
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.response?.data?.message || error.message);
-  //   }
-  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -44,7 +22,6 @@ const Account = () => {
       const { data } = await axiosInstance.post(api, payload);
   
       if (data.success) {
-        // Use data.token (not responseToken)
         await loginUser(data.token);
         toast.success(isSignUp ? 'Account created!' : 'Logged in successfully');
         navigate('/');
@@ -69,24 +46,12 @@ const Account = () => {
               <form className="w-full" onSubmit={handleSubmit}>
                 <div className='mb-5'>
                   <label htmlFor="email" className="block text-lg font-light mb-2">Email address</label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full p-3 border border-red-500 rounded-md outline-0"
-                  />
+                  <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3 border border-red-500 rounded-md outline-0" />
                 </div>
 
                 <div className='mb-5'>
                   <label htmlFor="password" className="block text-lg font-light mb-2">Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full p-3 border border-red-500 rounded-md outline-0"
-                  />
+                  <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 border border-red-500 rounded-md outline-0"/>
                 </div>
 
                 <div className="flex justify-between items-center">
@@ -119,38 +84,18 @@ const Account = () => {
               <form className="w-full" onSubmit={handleSubmit}>
                 <div>
                   <label htmlFor="name" className="block text-lg font-light mb-1">Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full p-3 border border-red-500 rounded-md outline-0"
-                    required
-                  />
+                  <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} className="w-full p-3 border border-red-500 rounded-md outline-0" required/>
                 </div>
 
                 <div>
                   <label htmlFor="email" className="block text-lg font-light mb-1">Email address</label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full p-3 border border-red-500 rounded-md outline-0"
-                    required
-                  />
+                  <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3 border border-red-500 rounded-md outline-0" required/>
                 </div>
 
                 <div>
                   <label htmlFor="password" className="block text-lg font-light mb-1">Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full p-3 border border-red-500 rounded-md outline-0"
-                    required
-                  />
+                  <input type="password" id="password" 
+                  value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 border border-red-500 rounded-md outline-0" required/>
                 </div>
 
                 <button type="submit" className="w-full bg-red-600 text-white font-semibold p-3 rounded-md hover:bg-red-700 transition mt-5">
@@ -161,10 +106,8 @@ const Account = () => {
 
             {!isSignUp && (
               <div className="md:mt-43 mt-15">
-                <button
-                  className="w-full bg-red-600 text-white font-semibold p-3 rounded-md hover:bg-red-700 transition md:text-[15px] text-xs"
-                  onClick={() => setIsSignUp(true)}
-                >
+                <button className="w-full bg-red-600 text-white font-semibold p-3 rounded-md hover:bg-red-700 transition md:text-[15px] text-xs"
+                  onClick={() => setIsSignUp(true)}>
                   CREATE AN ACCOUNT VIA E-MAIL
                 </button>
               </div>

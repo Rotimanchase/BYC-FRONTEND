@@ -19,13 +19,12 @@ const ProductRatings = ({ product }) => {
         ratings.distribution[review.rating] = (ratings.distribution[review.rating] || 0) + 1;
       }
     });
-    // Update totalRatings based on reviews if not provided
     if (!product?.totalReviews) {
       ratings.totalRatings = product.reviews.length;
     }
   }
 
-  const total = Object.values(ratings.distribution).reduce((a, b) => a + b, 0) || 1; // Avoid division by zero
+  const total = Object.values(ratings.distribution).reduce((a, b) => a + b, 0) || 1;
 
   const renderStars = (value) => {
     const fullStars = Math.floor(value);
@@ -64,10 +63,7 @@ const ProductRatings = ({ product }) => {
                   <span className="text-black font-medium ml-3">{star}</span>
                 </div>
                 <div className="flex-1 bg-gray-200 h-3 rounded-full">
-                  <div
-                    className="h-3 bg-orange-400 rounded-full"
-                    style={{ width: `${percentage}%` }}
-                  ></div>
+                  <div className="h-3 bg-orange-400 rounded-full" style={{ width: `${percentage}%` }}></div>
                 </div>
               </div>
             );

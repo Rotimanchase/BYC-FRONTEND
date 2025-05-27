@@ -11,7 +11,6 @@ const Wishlist = () => {
   const { addToCart, wishlist, removeFromWishlist } = useAppContext();
 
   useEffect(() => {
-    // console.log('Wishlist data:', JSON.stringify(wishlist, null, 2));
   }, [wishlist]);
 
   const handleAddToCart = async (product) => {
@@ -45,7 +44,6 @@ const Wishlist = () => {
     }
   };
 
-  // Filter out null or undefined wishlist items
   const validWishlist = Array.isArray(wishlist) ? wishlist.filter(item => item != null) : [];
 
   return (
@@ -66,26 +64,12 @@ const Wishlist = () => {
         <div className='grid grid-cols-1 md:grid-cols-5 gap-4 mb-[20px]'>
           {validWishlist.length > 0 ? (
             validWishlist.map((category, index) => (
-              <div
-                key={category._id || category.id || index}
-                className={`hover:-translate-y-[5px] hover:shadow-2xl transition duration-300 rounded ${
-                  activeView === 'grid' ? 'md:pt-8 pt-3' : 'flex gap-6 items-center'
-                }`}
-              >
-                <Link
-                  to={`/product/${category._id || category.id || '#'}`}
-                  onMouseEnter={() => setIsHover(index)}
-                  onMouseLeave={() => setIsHover(null)}
-                >
-                  <img
-                    className='rounded-t-[5px] w-full'
-                    src={
-                      category.productImage && Array.isArray(category.productImage) && category.productImage.length > 0
-                        ? category.productImage[0]
-                        : '/placeholder.jpg'
-                    }
-                    alt={category.productName || 'Product Image'}
-                  />
+              <div key={category._id || category.id || index} className={`hover:-translate-y-[5px] hover:shadow-2xl transition duration-300 rounded 
+              ${ activeView === 'grid' ? 'md:pt-8 pt-3' : 'flex gap-6 items-center' }`}>
+                <Link to={`/product/${category._id || category.id || '#'}`} onMouseEnter={() => setIsHover(index)} onMouseLeave={() => setIsHover(null)}>
+                  <img className='rounded-t-[5px] w-full'
+                    src={category.productImage && Array.isArray(category.productImage) && category.productImage.length > 0 ? category.productImage[0] : '/placeholder.jpg'
+                    } alt={category.productName || 'Product Image'}/>
                   <div className='pl-3'>
                     <h5 className='text-xl mt-3 mb-1 font-bold'>{category.productName || 'Untitled Product'}</h5>
                     <p className='text-[18px] mb-4'>{category.productCode || category.productNumber || 'N/A'}</p>
@@ -121,21 +105,13 @@ const Wishlist = () => {
                       <p className='ml-2'>{category.ratings ? category.ratings.toFixed(1) : '0.0'}</p>
                     </div>
                     <div className='relative'>
-                      <div
-                        className={`absolute ${
-                          isHover === index ? 'flex' : 'hidden'
-                        } flex-row md:gap-4 gap-6 w-full`}
-                      >
-                        <button
-                          onClick={() => handleRemoveFromWishlist(category._id || category.id)}
-                          className='flex items-center justify-center gap-2 border border-red-500 px-5 py-2 rounded-md cursor-pointer'
-                        >
+                      <div className={`absolute ${ isHover === index ? 'flex' : 'hidden' } flex-row md:gap-4 gap-6 w-full`} >
+                        <button onClick={() => handleRemoveFromWishlist(category._id || category.id)}
+                          className='flex items-center justify-center gap-2 border border-red-500 px-5 py-2 rounded-md cursor-pointer'>
                           <span className='text-red-600 font-semibold'>Remove</span>
                         </button>
-                        <button
-                          className='flex items-center justify-center gap-2 bg-red-600 text-white px-5 py-2 rounded-md hover:bg-red-700 transition cursor-pointer'
-                          onClick={() => handleAddToCart(category)}
-                        >
+                        <button className='flex items-center justify-center gap-2 bg-red-600 text-white px-5 
+                        py-2 rounded-md hover:bg-red-700 transition cursor-pointer' onClick={() => handleAddToCart(category)}>
                           <img src={assets.wishcart} alt='Add to Cart' className='h-4 w-4' />
                           <span className='font-semibold'>Buy Now</span>
                         </button>

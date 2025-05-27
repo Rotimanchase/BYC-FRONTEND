@@ -7,7 +7,6 @@ import { useAppContext } from "../context/AppsContext";
 
 const CheckOut = () => {
   const { cart, fetchCart, clearCart, user } = useAppContext();
-  // const user = JSON.parse(localStorage.getItem("user")) || null;
   const userId = user?._id;
   const [formData, setFormData] = useState({
     fullname: "",
@@ -185,12 +184,10 @@ const CheckOut = () => {
         if (response.data.success) {
           toast.success("Order placed successfully!");
           
-          // Clear cart after successful order
           await axiosInstance.delete("/api/cart/clear");
           clearCart();
           await fetchCart();
           
-          // Reset form
           setFormData({
             fullname: "",
             company: "",
@@ -213,15 +210,12 @@ const CheckOut = () => {
         const response = await axiosInstance.post("/api/order/stripe", orderPayload);
         
         if (response.data.success) {
-          // Store order info for payment success page
           sessionStorage.setItem('pendingOrderId', response.data.orderId);
           sessionStorage.setItem('orderTotal', total.toString());
           
-          // Redirect to Stripe checkout - FIXED: use response.data.url instead of data.url
           window.location.href = response.data.url;
           
           // Don't clear cart here - wait for payment success
-          // Don't navigate here - user will be redirected by Stripe
         } else {
           toast.error(response.data.message || "Order placement failed");
         }
@@ -248,22 +242,15 @@ const CheckOut = () => {
           {cartItems.length > 0 ? (
             cartItems.map((item, index) => (
               <div key={item.productId._id || index} className="mb-5 md:flex gap-5">
-                <img 
-                  className="md:w-60 md:h-70 h-50 w-50 mt-5"
-                  src={
-                    item.productId?.productImage?.length > 0
-                      ? item.productId.productImage[0]
-                      : '/placeholder.jpg'
-                  }
-                  alt={item.productId.productName || "Product Image"}/>
+                <img  className="md:w-60 md:h-70 h-50 w-50 mt-5"
+                  src={ item.productId?.productImage?.length > 0 ? item.productId.productImage[0] : '/placeholder.jpg' } alt={item.productId.productName || "Product Image"}/>
                 <div className="mt-5 md:text- ">
                   <h1 className="text-2xl font-bold">{item.productId.productName || "Untitled Project"}</h1>
                   <h1 className="text-xl mt-1">{item.productId.productNumber || item.productId.variant || "No Variant"}</h1>
                   <p className="md:text-[18px] text-sm font-light mb-5">{item.productId.productDescription || "No description available"}</p>
                   <h1 className="text-xl font-semibold">{currency}{item.productId.productPrice || 0}.00</h1>
                   <p className="text-xl mt-2">Quantity: {item.quantity}</p>
-                  <Link to={`/modify/${item.productId._id}`}
-                    className="bg-red-600 text-white rounded-md px-10 py-2 mt-4 inline-block hover:bg-red-700 transition">
+                  <Link to={`/modify/${item.productId._id}`} className="bg-red-600 text-white rounded-md px-10 py-2 mt-4 inline-block hover:bg-red-700 transition">
                     Modify Cart
                   </Link>
                 </div>
@@ -302,16 +289,12 @@ const CheckOut = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="md:flex gap-8 pt-10">
-        {/* Address Section */}
         <div className="w-80 md:w-1/2 space-y-5">
           {showAddressForm ? (
             <>
               <div>
                 <label className="block mb-2 text-lg font-light">Select Existing Address</label>
-                <select value={selectedAddressId}
-                  onChange={(e) => { setSelectedAddressId(e.target.value);
-                    if (e.target.value) setShowAddressForm(false);
-                  }}
+                <select value={selectedAddressId} onChange={(e) => { setSelectedAddressId(e.target.value); if (e.target.value) setShowAddressForm(false); }}
                   className="w-3/4 p-3 border border-red-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-300">
                   <option value='' >Add or select an address</option>
                   {addresses.map((addr) => (
@@ -335,15 +318,8 @@ const CheckOut = () => {
                   <label className="block mb-2 text-lg font-light" htmlFor={name}>
                     {label}
                   </label>
-                  <input
-                    id={name}
-                    name={name}
-                    type={type}
-                    value={formData[name] || ""}
-                    onChange={handleChange}
-                    className="w-3/4 p-3 border border-red-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-300"
-                    required={required}
-                  />
+                  <input id={name} name={name} type={type} value={formData[name] || ""} onChange={handleChange}
+                    className="w-3/4 p-3 border border-red-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-300" required={required}/>
                 </div>
               ))}
               
@@ -365,11 +341,7 @@ const CheckOut = () => {
               ) : (
                 <p className="text-gray-500">No address selected.</p>
               )}
-              <button 
-                type="button" 
-                onClick={handleChangeAddress} 
-                className="w-3/4 p-3 mt-2 text-white bg-red-600 hover:bg-red-700 rounded-lg text-sm font-light transition"
-              >
+              <button  type="button" onClick={handleChangeAddress} className="w-3/4 p-3 mt-2 text-white bg-red-600 hover:bg-red-700 rounded-lg text-sm font-light transition">
                 Change Address
               </button>
             </div>
@@ -381,13 +353,9 @@ const CheckOut = () => {
           <h1 className="block md:hidden mb-4 text-2xl font-bold">CHECKOUT</h1>
           <div className="bg-[#FFF8F8] rounded-xl px-6 pt-10 pb-6">
             
-            {/* Bank Transfer Option */}
             <label className="flex items-center gap-4 mb-4 cursor-pointer">
-              <input type="radio"  name="payment" 
-                checked={paymentMethod === "Bank Transfer"}
-                onChange={() => setPaymentMethod("Bank Transfer")}
-                className="w-5 h-5 border-red-600 text-red-600 focus:ring-red-500"
-                required/>
+              <input type="radio"  name="payment"  checked={paymentMethod === "Bank Transfer"} onChange={() => setPaymentMethod("Bank Transfer")}
+                className="w-5 h-5 border-red-600 text-red-600 focus:ring-red-500" required/>
               <span className="text-base font-medium">Direct bank transfer</span>
             </label>
             
@@ -405,20 +373,10 @@ const CheckOut = () => {
             
             {/* Online Payment Option */}
             <label className="flex items-center gap-4 mb-4 cursor-pointer">
-              <input 
-                type="radio"  
-                name="payment"
-                checked={paymentMethod === "Online Payment"}
-                onChange={() => setPaymentMethod("Online Payment")}
-                className="w-5 h-5 border-red-600 text-red-600 focus:ring-red-500"
-                required
-              />
+              <input type="radio"   name="payment" checked={paymentMethod === "Online Payment"} onChange={() => setPaymentMethod("Online Payment")}
+                className="w-5 h-5 border-red-600 text-red-600 focus:ring-red-500" required/>
               <span className="md:text-base text-sm font-medium">Secured Online Payment</span>
-              <img 
-                className="md:w-max md:max-w-[300px] w-30 mt-2 md:mt-0 object-contain" 
-                src={assets.checkpay} 
-                alt="payment options" 
-              />
+              <img  className="md:w-max md:max-w-[300px] w-30 mt-2 md:mt-0 object-contain" src={assets.checkpay} alt="payment options" />
             </label>
             
             {paymentMethod === "Online Payment" && (
@@ -440,10 +398,8 @@ const CheckOut = () => {
           </div>
           
           {/* Submit Button */}
-          <button 
-            type="submit" 
-            className="w-full p-3 bg-red-600 text-white rounded-lg text-sm font-light mt-6 hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed" 
-            disabled={isSubmitting || cartItems.length === 0}>
+          <button  type="submit"  className="w-full p-3 bg-red-600 text-white rounded-lg text-sm 
+          font-light mt-6 hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"  disabled={isSubmitting || cartItems.length === 0}>
             {isSubmitting ? (
               <span className="flex items-center justify-center gap-2">
                 <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">

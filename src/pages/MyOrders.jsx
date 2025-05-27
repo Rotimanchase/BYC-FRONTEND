@@ -44,13 +44,6 @@ const MyOrders = () => {
     fetchMyOrders();
   }, []);
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate('/account');
-  //   }
-  // }, [user, navigate]);
-
-
   // Format address as a single line
   const formatAddress = (address) => {
     if (!address) return 'N/A';
@@ -79,10 +72,7 @@ const MyOrders = () => {
       ) : (
         myOrders.map((order, index) => {
           return (
-            <div
-              key={order._id || index}
-              className="border border-gray-300 rounded-lg mb-10 px-3 py-5 max-w-5xl"
-            >
+            <div key={order._id || index} className="border border-gray-300 rounded-lg mb-10 px-3 py-5 max-w-5xl">
               <div className="flex justify-between md:items-center text-gray-400 md:font-medium max-md:flex-col px-4 pb-4">
                 <div>
                   <span>OrderId: {order._id || 'N/A'}</span>
@@ -102,19 +92,11 @@ const MyOrders = () => {
                   if (!item.product) {
                     console.warn('Item missing product data:', JSON.stringify(item, null, 2));
                     return (
-                      <div
-                        key={item._id || itemIndex}
-                        className={`relative bg-white text-gray-500/70 ${
-                          order.items.length !== itemIndex + 1 && 'border-b'
-                        } border-gray-300 flex flex-col md:flex-row md:items-center justify-between p-4 md:gap-16 w-full`}
-                      >
+                      <div key={item._id || itemIndex} className={`relative bg-white text-gray-500/70 ${ order.items.length !== itemIndex + 1 && 'border-b'
+                        } border-gray-300 flex flex-col md:flex-row md:items-center justify-between p-4 md:gap-16 w-full`}>
                         <div className="flex items-center mb-4 md:mb-0">
                           <div className="bg-primary/10 p-4 rounded-lg">
-                            <img
-                              className="md:w-20 w-16 object-cover"
-                              src="/placeholder.jpg"
-                              alt="Missing Product"
-                            />
+                            <img className="md:w-20 w-16 object-cover" src="/placeholder.jpg" alt="Missing Product"/>
                           </div>
                           <div className="ml-4">
                             <h2 className="text-xl font-medium text-gray-800">
@@ -143,23 +125,13 @@ const MyOrders = () => {
                     console.warn('Missing or invalid category for item:', JSON.stringify(item.product, null, 2));
                   }
                   return (
-                    <div
-                      key={item._id || itemIndex}
-                      className={`relative bg-white text-gray-500/70 ${
-                        order.items.length !== itemIndex + 1 && 'border-b'
-                        } border-gray-300 flex flex-col md:flex-row md:items-center justify-between p-4 md:gap-16 w-full`}
-                    >
+                    <div key={item._id || itemIndex} className={`relative bg-white text-gray-500/70 ${ order.items.length !== itemIndex 
+                    + 1 && 'border-b' } border-gray-300 flex flex-col md:flex-row md:items-center justify-between p-4 md:gap-16 w-full`}>
                       <div className="flex items-center mb-4 md:mb-0">
                         <div className="bg-primary/10 p-4 rounded-lg">
-                          <img
-                            className="md:w-20 w-16 object-cover"
-                            src={
-                              item.product.productImage && item.product.productImage.length > 0
-                                ? item.product.productImage[0]
-                                : '/placeholder.jpg'
-                            }
-                            alt={item.product.productName || item.name || 'Product Image'}
-                          />
+                          <img className="md:w-20 w-16 object-cover"
+                            src={ item.product.productImage && item.product.productImage.length > 0 ? item.product.productImage[0] : '/placeholder.jpg'
+                            } alt={item.product.productName || item.name || 'Product Image'}/>
                         </div>
                         <div className="ml-4">
                           <h2 className="text-xl font-medium text-gray-800">

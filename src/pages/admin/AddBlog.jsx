@@ -84,90 +84,45 @@ const AddBlog = () => {
           <label className="text-base font-medium" htmlFor="blogImage">
             Blog Image URL
           </label>
-          <input
-            id="blogImage"
-            type="text"
-            value={formData.blogImage}
-            onChange={handleInputChange}
-            placeholder="Enter Cloudinary blog image URL"
-            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-            required
-          />
+          <input id="blogImage" type="text" value={formData.blogImage} onChange={handleInputChange} placeholder="Enter Cloudinary blog image URL"  
+          className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required/>
         </div>
         <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="blogTitle">
             Blog Title
           </label>
-          <input
-            id="blogTitle"
-            type="text"
-            value={formData.blogTitle}
-            onChange={handleInputChange}
-            placeholder="Enter blog title"
-            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-            required
-          />
+          <input id="blogTitle" type="text" value={formData.blogTitle} onChange={handleInputChange} placeholder="Enter blog title"
+            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required/>
         </div>
         <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="blogDescription">
             Blog Description
           </label>
-          <textarea
-            id="blogDescription"
-            rows={4}
-            value={formData.blogDescription}
-            onChange={handleInputChange}
-            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40 resize-none"
-            placeholder="Enter blog description"
-          />
+          <textarea id="blogDescription" rows={4} value={formData.blogDescription} onChange={handleInputChange}
+            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40 resize-none" placeholder="Enter blog description" />
         </div>
         <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="authorImage">
             Author Image URL
           </label>
-          <input
-            id="authorImage"
-            type="text"
-            value={formData.authorImage}
-            onChange={handleInputChange}
-            placeholder="Enter Cloudinary author image URL"
-            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-            required
-          />
+          <input id="authorImage" type="text" value={formData.authorImage} onChange={handleInputChange} placeholder="Enter Cloudinary author image URL"
+            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required />
         </div>
         <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="authorName">
             Author Name
           </label>
-          <input
-            id="authorName"
-            type="text"
-            value={formData.authorName}
-            onChange={handleInputChange}
-            placeholder="Enter author name"
-            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-            required
-          />
+          <input id="authorName" type="text" value={formData.authorName} onChange={handleInputChange} placeholder="Enter author name"
+            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required/>
         </div>
         <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="authorTitle">
             Author Title
           </label>
-          <input
-            id="authorTitle"
-            type="text"
-            value={formData.authorTitle}
-            onChange={handleInputChange}
-            placeholder="Enter author title"
-            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-            required
-          />
+          <input id="authorTitle" type="text" value={formData.authorTitle} onChange={handleInputChange} placeholder="Enter author title"
+            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40" required/>
         </div>
-        <button
-          type="submit"
-          className="px-8 py-2.5 bg-red-500 text-white font-medium rounded disabled:bg-red-300"
-          disabled={loading}
-        >
+        <button type="submit" className="px-8 py-2.5 bg-red-500 text-white font-medium rounded disabled:bg-red-300" disabled={loading} >
           {loading ? 'Adding...' : 'ADD BLOG'}
         </button>
       </form>

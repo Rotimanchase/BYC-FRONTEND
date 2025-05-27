@@ -8,11 +8,10 @@ import Pargination from '../components/Pargination';
 const BlogPost = ({ showAll = false, enableMobilePagination = false }) => {
   const [blogs, setBlogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const isMobile = window.innerWidth < 768; // Detect mobile screens
-  const blogsPerPage = isMobile ? 1 : 3; // 1 blog on mobile, 3 on larger screens
+  const isMobile = window.innerWidth < 768;
+  const blogsPerPage = isMobile ? 1 : 3; 
   const totalPages = Math.ceil(blogs.length / blogsPerPage);
 
-  // Fetch blogs
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
@@ -27,14 +26,12 @@ const BlogPost = ({ showAll = false, enableMobilePagination = false }) => {
     fetchBlogs();
   }, []);
 
-  // Pagination logic
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
   const paginatedBlogs = showAll && !enableMobilePagination && !isMobile
     ? blogs.slice(0, 3)
     : blogs.slice(indexOfFirstBlog, indexOfLastBlog);
 
-  // Track views once per session
   useEffect(() => {
     const incrementViews = async () => {
       const viewedBlogs = JSON.parse(localStorage.getItem('viewedBlogs')) || [];
@@ -63,7 +60,6 @@ const BlogPost = ({ showAll = false, enableMobilePagination = false }) => {
     if (blogs.length > 0) incrementViews();
   }, [blogs, currentPage]);
 
-  // Handle likes
   const handleLike = async (id) => {
     const likedBlogs = JSON.parse(localStorage.getItem('likedBlogs')) || [];
     if (likedBlogs.includes(id)) {
@@ -95,17 +91,14 @@ const BlogPost = ({ showAll = false, enableMobilePagination = false }) => {
 
   return (
     <div className="my-20 md:my-30">
-      {/* Show heading only on Home */}
       {!showAll && (
         <h2 className="md:text-[40px] text-2xl font-bold flex justify-center mb-15 md:mb-40">
           BYC AFRICA Blog News
         </h2>
       )}
 
-      {/* Blog display */}
       {paginatedBlogs.length > 0 ? (
         <>
-          {/* Mobile: Show one blog card */}
           <div className="md:hidden flex justify-center">
             {paginatedBlogs.map((blog) => (
               <div key={blog._id} className="shadow-xl w-80 mx-5 mb-5">
@@ -113,18 +106,11 @@ const BlogPost = ({ showAll = false, enableMobilePagination = false }) => {
                   <img className="w-full h-70" src={blog.blogImage} alt={blog.blogTitle} />
                 </Link>
                 <div className="flex items-center gap-8 bg-[#E0E0E0] w-70 ml-5 mt-4 mb-4 p-2">
-                  <img
-                    src={blog.authorImage}
-                    alt="author"
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
+                  <img src={blog.authorImage} alt="author" className="w-10 h-10 rounded-full object-cover" />
                   <p className="flex items-center gap-3">
                     <FiEye /> {blog.blogViews}
                   </p>
-                  <button
-                    onClick={() => handleLike(blog._id)}
-                    className="flex items-center gap-3 hover:text-red-500 transition"
-                  >
+                  <button onClick={() => handleLike(blog._id)} className="flex items-center gap-3 hover:text-red-500 transition" >
                     <FiHeart /> {blog.blogLikes}
                   </button>
                 </div>
@@ -134,18 +120,13 @@ const BlogPost = ({ showAll = false, enableMobilePagination = false }) => {
                 </div>
                 <div className="ml-5 mb-5">
                   <p className="text-[15px] font-bold">
-                    {blog.blogTitle.trim().endsWith('.')
-                      ? blog.blogTitle.trim()
-                      : blog.blogTitle.trim() + '.'}
+                    {blog.blogTitle.trim().endsWith('.') ? blog.blogTitle.trim() : blog.blogTitle.trim() + '.'}
                   </p>
                   <p className="text-[10px] text-gray-600 line-clamp-3 mr-5">
                     {truncateDescription(blog.blogDescription)}
                   </p>
                   <button className="mt-5 mb-15">
-                    <Link
-                      to={`/blogs/${blog._id}`}
-                      className="flex items-center border border-black py-[9px] px-[15px] text-xs font-bold gap-2"
-                    >
+                    <Link to={`/blogs/${blog._id}`} className="flex items-center border border-black py-[9px] px-[15px] text-xs font-bold gap-2" >
                       Read more <FiArrowRight />
                     </Link>
                   </button>
@@ -154,7 +135,6 @@ const BlogPost = ({ showAll = false, enableMobilePagination = false }) => {
             ))}
           </div>
 
-          {/* Desktop/Medium: Show grid */}
           <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 ml-8 md:ml-10 mr-5 md:mx-20">
             {paginatedBlogs.map((blog) => (
               <div key={blog._id} className="shadow-xl w-full">
@@ -162,18 +142,11 @@ const BlogPost = ({ showAll = false, enableMobilePagination = false }) => {
                   <img className="w-full h-100" src={blog.blogImage} alt={blog.blogTitle} />
                 </Link>
                 <div className="flex items-center gap-6 bg-[#E0E0E0] w-60 md:ml-10 mt-10 mb-4 p-2">
-                  <img
-                    src={blog.authorImage}
-                    alt="author"
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
+                  <img src={blog.authorImage} alt="author" className="w-10 h-10 rounded-full object-cover"/>
                   <p className="flex items-center gap-2">
                     <FiEye /> {blog.blogViews}
                   </p>
-                  <button
-                    onClick={() => handleLike(blog._id)}
-                    className="flex items-center gap-4 hover:text-red-500 transition"
-                  >
+                  <button onClick={() => handleLike(blog._id)} className="flex items-center gap-4 hover:text-red-500 transition">
                     <FiHeart /> {blog.blogLikes}
                   </button>
                 </div>
@@ -183,18 +156,13 @@ const BlogPost = ({ showAll = false, enableMobilePagination = false }) => {
                 </div>
                 <div className="ml-10 mb-10">
                   <p className="text-[17px] md:text-[20px] font-bold pb-2">
-                    {blog.blogTitle.trim().endsWith('.')
-                      ? blog.blogTitle.trim()
-                      : blog.blogTitle.trim() + '.'}
+                    {blog.blogTitle.trim().endsWith('.') ? blog.blogTitle.trim() : blog.blogTitle.trim() + '.'}
                   </p>
                   <p className="text-[10px] md:text-[16px] text-gray-600 line-clamp-3 mr-5">
                     {truncateDescription(blog.blogDescription)}
                   </p>
                   <button className="mt-10 mb-15">
-                    <Link
-                      to={`/blogs/${blog._id}`}
-                      className="flex items-center border border-black py-[8px] px-[28px] text-sm font-bold gap-2"
-                    >
+                    <Link to={`/blogs/${blog._id}`} className="flex items-center border border-black py-[8px] px-[28px] text-sm font-bold gap-2">
                       Read more <FiArrowRight />
                     </Link>
                   </button>
@@ -207,20 +175,15 @@ const BlogPost = ({ showAll = false, enableMobilePagination = false }) => {
         <p className="text-center col-span-full">No blogs available</p>
       )}
 
-      {/* Pagination — Show on Home or when enableMobilePagination is true on mobile */}
       {(!showAll || (enableMobilePagination && isMobile)) && (
         <div className="mt-10">
           <Pargination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
       )}
 
-      {/* View All button — Only show on Home */}
       {!showAll && (
         <div className="flex justify-center mt-15 md:mt-20">
-          <Link
-            to="/blogs"
-            className="border border-black py-[9px] px-[40px] md:py-[8px] md:px-[80px] md:text-lg text-l font-bold"
-          >
+          <Link to="/blogs" className="border border-black py-[9px] px-[40px] md:py-[8px] md:px-[80px] md:text-lg text-l font-bold">
             View All
           </Link>
         </div>

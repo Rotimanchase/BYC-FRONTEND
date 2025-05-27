@@ -37,10 +37,7 @@ const RecentlyView = () => {
         <h1 className='md:text-2xl text-sm font-bold'>Recently Viewed</h1>
         <div className='flex items-center space-x-4'>
           {recentlyViewed.length > 0 && (
-            <button
-              onClick={handleClearRecentlyViewed}
-              className='text-[9px] md:text-xl text-red-500 hover:underline'
-            >
+            <button onClick={handleClearRecentlyViewed} className='text-[9px] md:text-xl text-red-500 hover:underline'>
               Clear Recently Viewed
             </button>
           )}
@@ -61,18 +58,10 @@ const RecentlyView = () => {
           </div>
         ) : recentlyViewed.length > 0 ? (
           recentlyViewed.map((product) => (
-            <div
-              key={product._id}
-              className='hover:-translate-y-[5px] hover:shadow-2xl transition duration-300 md:pt-8 pt-3 rounded'>
+            <div key={product._id} className='hover:-translate-y-[5px] hover:shadow-2xl transition duration-300 md:pt-8 pt-3 rounded'>
               <Link to={`/product/${product._id}`}>
-                <img
-                  className='w-full rounded-t-[5px] md:h-60 h-40'
-                  src={
-                    product.productImage && product.productImage.length > 0
-                      ? product.productImage[0]
-                      : '/placeholder.jpg'
-                  }
-                  alt={product.productName}/>
+                <img className='w-full rounded-t-[5px] md:h-60 h-40'
+                  src={ product.productImage && product.productImage.length > 0 ? product.productImage[0] : '/placeholder.jpg' } alt={product.productName}/>
               </Link>
               <h5 className='md:text-xl pl-3 mt-3 mb-1 font-bold'>{product.productName || 'Unnamed Product'}</h5>
               <p className='md:text-[18px] pl-3 mb-4'>{product.productNumber}</p>

@@ -35,8 +35,6 @@ const Products = () => {
         const filterProductType = sessionStorage.getItem('filterProductType');
         const filterGender = sessionStorage.getItem('filterGender');
 
-        console.log('Filters found:', { filterCategory, filterProductType, filterGender });
-
         let filteredProducts = [];
 
         const response = await axiosInstance.get('/api/product');
@@ -155,11 +153,7 @@ const Products = () => {
         <div className='flex justify-between mb-2 md:mb-5'>
           <h1 className='md:text-2xl text-xl font-bold'>All Products</h1>
           <div>
-            <SortBtn 
-              data={filteredProducts} 
-              setData={setFilteredProducts}
-              defaultSort="Most Sold"
-            />
+            <SortBtn  data={filteredProducts} setData={setFilteredProducts} defaultSort="Most Sold"/>
           </div>
         </div>
 
@@ -167,19 +161,12 @@ const Products = () => {
           <ViewToggle activeView={activeView} setActiveView={setActiveView} />
         </div>
 
-        <div className={`${
-            activeView === 'grid' ? 'grid grid-cols-2 md:grid-cols-5 md:gap-4 gap-2' : 'flex flex-col gap-6'
-          } md:mb-32`}>
+        <div className={`${ activeView === 'grid' ? 'grid grid-cols-2 md:grid-cols-5 md:gap-4 gap-2' : 'flex flex-col gap-6' } md:mb-32`}>
           {currentProducts.length > 0 ? (
             currentProducts.map((category, index) => (
               <div key={category._id}
-                className={`hover:-translate-y-1 hover:shadow-2xl transition duration-300 rounded ${
-                  activeView === 'grid' ? 'md:pt-8 pt-3' : 'flex gap-6 items-center'
-                }`}>
-                <div
-                  onMouseEnter={() => setIsHover(index)}
-                  onMouseLeave={() => setIsHover(null)}
-                  className={activeView === 'list' ? 'flex w-full pt-2' : ''}>
+                className={`hover:-translate-y-1 hover:shadow-2xl transition duration-300 rounded ${ activeView === 'grid' ? 'md:pt-8 pt-3' : 'flex gap-6 items-center' }`}>
+                <div onMouseEnter={() => setIsHover(index)} onMouseLeave={() => setIsHover(null)} className={activeView === 'list' ? 'flex w-full pt-2' : ''}>
                   <Link to={`/product/${category._id}`} className="block">
                     <img className={`rounded-t object-cover ${ activeView === 'list' ? 'md:w-65 h-32 w-24 md:h-65 rounded' : 'w-full h-40 md:h-60' }`}
                       src={category.productImage && category.productImage.length > 0 ? category.productImage[0]  : '/placeholder.jpg' } alt={category.productName}/>
@@ -212,29 +199,22 @@ const Products = () => {
                       </p>
                     </div>
                     <div className='relative'>
-                      <div className={`absolute ${
-                          isHover === index ? 'flex' : 'hidden'
-                        } ${activeView === 'list'
-                          ? 'flex-col md:flex-row mt-1'
-                          : 'flex-row'} md:gap-4 gap-2 w-full z-10`}>
-                        <button
-                          className='flex items-center justify-center md:gap-3 gap-1 border border-red-500 md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-50 transition-colors cursor-pointer'
-                          onClick={() => handleAddToWishlist(category)}>
+                      <div className={`absolute ${ isHover === index ? 'flex' : 'hidden' } ${activeView === 'list' ? 'flex-col md:flex-row mt-1' 
+                        : 'flex-row'} md:gap-4 gap-2 w-full z-10`}>
+                        <button className='flex items-center justify-center md:gap-3 gap-1 border border-red-500 md:px-5 md:py-2 
+                        px-2 py-1 rounded-md hover:bg-red-50 transition-colors cursor-pointer' onClick={() => handleAddToWishlist(category)}>
                           <img src={assets.wishlove} alt='Add to Wishlist' className='md:h-4 md:w-4 h-2' />
                           <span className='text-red-600 text-xs md:text-sm'>Wishlist</span>
                         </button>
-                        <Link className='flex items-center justify-center md:gap-3 gap-1 bg-red-600 text-white md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-700 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
-                          to={`/product/${category._id}`}
-                          disabled={category.productStock <= 0}>
+                        <Link className='flex items-center justify-center md:gap-3 gap-1 bg-red-600 text-white md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-700 
+                        transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed' to={`/product/${category._id}`} disabled={category.productStock <= 0}>
                           <img src={assets.wishcart} alt='Add to Cart' className='md:h-4 md:w-4 h-2'/>
                           <span className=' text-xs md:text-sm'>
                             {category.productStock <= 0 ? 'Out of Stock' : 'Buy Now'}
                           </span>
                         </Link>
                       </div>
-                      <div className={`${
-                        activeView === 'list' ? 'min-h-24 md:min-h-16' : 'min-h-14'
-                      }`}></div>
+                      <div className={`${ activeView === 'list' ? 'min-h-24 md:min-h-16' : 'min-h-14' }`}></div>
                     </div>
                   </div>
                 </div>
@@ -248,11 +228,7 @@ const Products = () => {
         </div>
 
         <div className='mb-10 mt-5'>
-          <Pargination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            setCurrentPage={setCurrentPage}
-          />
+          <Pargination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage}/>
         </div>
       </div>
 

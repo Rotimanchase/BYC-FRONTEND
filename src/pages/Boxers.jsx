@@ -22,7 +22,6 @@ const Boxers = () => {
       setLoading(true);
       setError(null);
       try {
-        // Fetch all products and filter client-side for better control
         let response = await axiosInstance.get('/api/product');
         
         let boxerProducts = [];
@@ -34,17 +33,14 @@ const Boxers = () => {
             const productNameUpper = product.productName.toUpperCase();
             const hasBoxerInName = productNameUpper.includes('BOXERS');
             
-            // Check if it's a men's category product
             const isMenCategory = (product.category && product.category.name === 'Men') 
             
-            // Check if it's in stock
             const isInStock = product.inStock !== false && product.productStock > 0;
 
             return hasBoxerInName && isMenCategory && isInStock;
           });
         }
 
-        console.log('Found boxer products:', boxerProducts);
         const filteredBoxers = boxerProducts;
 
         setProducts(filteredBoxers);
@@ -73,7 +69,6 @@ const Boxers = () => {
   const handleCart = async (productId) => {
     try {
       await addToCart(productId, 1, null, null);
-      // Optional: show success message
     } catch (err) {
       console.error('Failed to add to cart:', err);
     }
@@ -103,12 +98,7 @@ const Boxers = () => {
         <div className='flex justify-between mb-2 md:mb-5'>
           <h1 className='md:text-2xl text-xl font-bold'>Men's Boxers</h1>
           <div>
-            <SortBtn 
-              variant="red"
-              data={filteredProducts}
-              setData={setFilteredProducts}
-              defaultSort="Most Sold"
-            />
+            <SortBtn variant="red" data={filteredProducts} setData={setFilteredProducts} defaultSort="Most Sold"/>
           </div>
         </div>
 
@@ -127,9 +117,7 @@ const Boxers = () => {
         ) : error ? (
           <div className='text-center py-16'>
             <p className='text-red-500 text-lg'>{error}</p>
-            <button 
-              onClick={() => window.location.reload()} 
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">
+            <button  onClick={() => window.location.reload()} className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">
               Try Again
             </button>
           </div>
@@ -138,30 +126,14 @@ const Boxers = () => {
             <p className='text-gray-500 mt-2'>Check back later for new arrivals!</p>
           </div>
         ) : (
-          <div
-            className={`${
-              activeView === 'grid' 
-                ? 'grid grid-cols-2 md:grid-cols-5 md:gap-4 gap-2' 
-                : 'flex flex-col gap-6'
-            } mb-8 mt-8`} >
+          <div className={`${ activeView === 'grid' ? 'grid grid-cols-2 md:grid-cols-5 md:gap-4 gap-2' : 'flex flex-col gap-6' } mb-8 mt-8`} >
             {filteredProducts.map((product, index) => (
               <div key={product._id}
-                className={`hover:-translate-y-1 hover:shadow-2xl transition duration-300 rounded ${
-                  activeView === 'grid' ? 'md:pt-8 pt-3' : 'flex gap-6 items-center'
-                }`} >
-                <div 
-                  onMouseEnter={() => setIsHover(index)}
-                  onMouseLeave={() => setIsHover(null)}
-                  onClick={() => handleProductClick(product._id)}
-                  className={activeView === 'list' ? 'flex w-full pl-5' : ''}>
+                className={`hover:-translate-y-1 hover:shadow-2xl transition duration-300 rounded ${activeView === 'grid' ? 'md:pt-8 pt-3' : 'flex gap-6 items-center'}`} >
+                <div onMouseEnter={() => setIsHover(index)} onMouseLeave={() => setIsHover(null)} onClick={() => handleProductClick(product._id)} className={activeView === 'list' ? 'flex w-full pl-5' : ''}>
                   <Link to={`/product/${product._id}`} className="block">
-                    <img className={`rounded-t object-cover ${
-                        activeView === 'list'
-                          ? 'md:w-full h-32 w-24 md:h-full rounded'
-                          : 'w-full h-40 md:h-60'}`}
-                      src={product.productImage && product.productImage.length > 0
-                          ? product.productImage[0]
-                          : '/placeholder.jpg'} alt={product.productName} loading="lazy"/>
+                    <img className={`rounded-t object-cover ${ activeView === 'list' ? 'md:w-full h-32 w-24 md:h-full rounded' : 'w-full h-40 md:h-60'}`}
+                      src={product.productImage && product.productImage.length > 0 ? product.productImage[0] : '/placeholder.jpg'} alt={product.productName} loading="lazy"/>
                   </Link>
                   <div className={activeView === 'list' ? 'pl-6 flex-1' : 'pl-3'}>
                     <h5 className='md:text-xl md:mt-3 mt-1 mb-1 font-bold truncate'>
@@ -174,8 +146,7 @@ const Boxers = () => {
                     {product.productDescription && (
                       <div className="line-clamp-2 md:line-clamp-none overflow-hidden">
                         {product.productDescription.split('/').map(
-                          (sentence, i) =>
-                            sentence.trim() && (
+                          (sentence, i) => sentence.trim() && (
                               <p key={i} className="text-gray-500 md:text-sm text-xs mb-1">
                                 {sentence.trim()}
                               </p>
@@ -206,43 +177,22 @@ const Boxers = () => {
                     </div>
                     
                     <div className='relative'>
-                      <div className={`absolute ${
-                          isHover === index ? 'flex' : 'hidden'
-                        } ${
-                          activeView === 'list' 
-                            ? 'flex-col md:flex-row mt-1' 
-                            : 'flex-row'
-                        } md:gap-4 gap-2 w-full z-10`}
-                      >
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleWishlist(product);
-                          }}
-                          className='flex items-center justify-center gap-2 border border-red-500 md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-50 transition-colors cursor-pointer'
-                        >
+                      <div className={`absolute ${ isHover === index ? 'flex' : 'hidden' } ${ activeView === 'list'  ? 'flex-col md:flex-row mt-1'  : 'flex-row' } md:gap-4 gap-2 w-full z-10`}>
+                        <button onClick={(e) => { e.preventDefault(); handleWishlist(product); }}
+                          className='flex items-center justify-center gap-2 border border-red-500 md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-50 transition-colors cursor-pointer'>
                           <img src={assets.wishlove} alt='Add to Wishlist' className='md:h-4 md:w-4 hidden md:block' />
                           <span className='text-red-600 font-semibold text-xs md:text-sm'>Wishlist</span>
                         </button>
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleCart(product._id);
-                          }}
-                          className='flex items-center justify-center gap-2 bg-red-600 text-white md:px-5 md:py-2 px-2 py-1 rounded-md hover:bg-red-700 transition-colors cursor-pointer disabled:opacity-50'
-                          disabled={product.productStock <= 0}
-                        >
+                        <button onClick={(e) => { e.preventDefault(); handleCart(product._id);}} 
+                          className='flex items-center justify-center gap-2 bg-red-600 text-white md:px-5 md:py-2 px-2 py-1 
+                          rounded-md hover:bg-red-700 transition-colors cursor-pointer disabled:opacity-50' disabled={product.productStock <= 0}>
                           <img src={assets.wishcart} alt='Add to Cart' className='md:h-4 md:w-4 hidden md:block' />
                           <span className='font-semibold text-xs md:text-sm'>
                             {product.productStock <= 0 ? 'Out of Stock' : 'Buy Now'}
                           </span>
                         </button>
                       </div>
-                      <div
-                        className={`${
-                          activeView === 'list' ? 'min-h-24 md:min-h-16' : 'min-h-14'
-                        }`}
-                      ></div>
+                      <div className={`${ activeView === 'list' ? 'min-h-24 md:min-h-16' : 'min-h-14' }`}></div>
                     </div>
                   </div>
                 </div>

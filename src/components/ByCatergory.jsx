@@ -20,7 +20,6 @@ const ByCatergory = () => {
     return () => window.removeEventListener("resize", updateItemsPerSlide);
   }, []);
 
-  // Fetch products based on active category and product type
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -28,7 +27,6 @@ const ByCatergory = () => {
         const response = await axiosInstance.get('/api/product');
         
         if (response.data.success) {
-          // Filter products based on active category and product type
           const filteredProducts = response.data.products.filter(product => {
             const categoryMap = {
               'men': 'Men',
@@ -44,7 +42,7 @@ const ByCatergory = () => {
           });
 
           setProducts(filteredProducts);
-          setCurrentSlide(0); // Reset carousel when products change
+          setCurrentSlide(0);
         }
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -56,7 +54,6 @@ const ByCatergory = () => {
     fetchProducts();
   }, [active, activeProductType]);
 
-  // Reset product type when category changes
   useEffect(() => {
     if (active === 'women') {
       setActiveProductType('CAMISOLE');
@@ -65,7 +62,6 @@ const ByCatergory = () => {
     }
   }, [active]);
 
-  // Group products dynamically for carousel
   const groupedProducts = [];
   for (let i = 0; i < products.length; i += itemsPerSlide) {
     groupedProducts.push(products.slice(i, i + itemsPerSlide));
@@ -89,7 +85,6 @@ const ByCatergory = () => {
     { label: 'For Kids', value: 'kids' },
   ];
 
-  // Dynamic product types based on selected category
   const getProductTypes = () => {
     if (active === 'women') {
       return [
@@ -99,7 +94,6 @@ const ByCatergory = () => {
         { label: 'Boxers', value: 'BOXERS' },
       ];
     } else {
-      // Default for men and kids
       return [
         { label: 'T-shirt', value: 'T-SHIRT' },
         { label: 'Singlet', value: 'SINGLET' },
@@ -118,10 +112,9 @@ const ByCatergory = () => {
           Shop By Category
         </h2>
 
-        {/* Category Tabs */}
         <div className='flex text-center justify-center gap-6'>
           {tabs.map((tab) => (
-            <div  key={tab.value}  onClick={() => setActive(tab.value)}  className='cursor-pointer'>
+            <div key={tab.value} onClick={() => setActive(tab.value)} className='cursor-pointer'>
               <h1 className={`md:text-3xl text-xl ${ active === tab.value ? 'text-gray-900' : 'text-gray-500 font-light' }`}>
                 {tab.label}
               </h1>
@@ -132,20 +125,15 @@ const ByCatergory = () => {
           ))}
         </div>
 
-        {/* Product Type Buttons */}
         <div className='md:flex grid grid-cols-2 text-center justify-center gap-3 mt-10 w-60 mx-auto md:ml-10 md:w-auto'>
           {productTypes.map((type) => (
             <button key={type.value} onClick={() => setActiveProductType(type.value)} className={`border-1 px-6 py-3 text-xl transition-colors ${
-                activeProductType === type.value
-                  ? 'bg-red-700 text-white'
-                  : 'border-gray-300 hover:bg-gray-50'
-              }`} >
+                activeProductType === type.value ? 'bg-red-700 text-white' : 'border-gray-300 hover:bg-gray-50' }`} >
               {type.label}
             </button>
           ))}
         </div>
 
-        {/* Products Carousel */}
         <div className="relative w-full py-10 bg-white">
           {loading ? (
             <div className="flex justify-center items-center h-96">
@@ -160,7 +148,6 @@ const ByCatergory = () => {
             </div>
           ) : (
             <>
-              {/* Carousel Wrapper */}
               <div className="overflow-hidden relative">
                 <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }} >
                   {groupedProducts.map((group, index) => (
@@ -168,12 +155,10 @@ const ByCatergory = () => {
                       {group.map((product) => (
                         <div key={product._id} className="flex flex-col items-center" style={{ width: `${80 / itemsPerSlide}%` }} >
                           <Link to={`/product/${product._id}`}>
-                            <img  src={ product.productImage && product.productImage.length > 0
-                                  ? product.productImage[0] : '/placeholder.jpg' } 
+                            <img  src={ product.productImage && product.productImage.length > 0 ? product.productImage[0] : '/placeholder.jpg' } 
                               alt={product.productName || 'Product'} className="w-150 h-100 object-cover rounded-lg hover:shadow-lg transition-shadow cursor-pointer" />
                           </Link>
                           
-                          {/* Product Information */}
                           <div className="mt-6 w-full">
                             <div className='flex gap-3 items-center'>
                               <h3 className="font-bold text-xl truncate">
@@ -194,16 +179,13 @@ const ByCatergory = () => {
                   ))}
                 </div>
 
-                {/* Navigation Buttons - Only show if there are multiple slides */}
                 {groupedProducts.length > 1 && (
                   <>
-                    {/* Prev Button */}
                     <button onClick={handlePrev}
                       className="absolute top-1/2 left-5 -translate-y-1/2 text-black p-3 cursor-pointer z-10 hover:bg-gray-100 rounded-full transition-colors">
                       <img src={assets.arrowleft} alt="Previous" />
                     </button>
 
-                    {/* Next Button */}
                     <button onClick={handleNext}
                       className="absolute top-1/2 right-5 -translate-y-1/2 cursor-pointer text-black p-3 z-10 hover:bg-gray-100 rounded-full transition-colors" >
                       <img src={assets.arrowright} alt="Next" />
@@ -212,14 +194,11 @@ const ByCatergory = () => {
                 )}
               </div>
 
-              {/* Carousel Indicators */}
               {groupedProducts.length > 1 && (
                 <div className="flex justify-center mt-6 gap-2">
                   {groupedProducts.map((_, index) => (
                     <button key={index} onClick={() => setCurrentSlide(index)} className={`w-3 h-3 rounded-full transition-colors ${
-                        currentSlide === index ? 'bg-red-500' : 'bg-gray-300'
-                      }`}
-                    />
+                        currentSlide === index ? 'bg-red-500' : 'bg-gray-300'}`}/>
                   ))}
                 </div>
               )}
