@@ -449,7 +449,6 @@ export const AppsProvider = ({ children }) => {
         addRecentlyViewed,
         clearRecentlyViewed,
         fetchRecentlyViewed,
-        refreshProducts,
         loginUser,
       }}>
       {children}
